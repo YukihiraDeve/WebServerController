@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
-const ServerStatus = () => {
+const ServerStatus = ({ serverName }) => {
   const [stats, setStats] = useState({ memory: {}, cpu: [], storage: '' });
 
   const fetchStats = () => {
-    fetch('http://localhost:3001/api/system-stats/stats', {
-      headers: {
-        'x-api-key': 'test'
-      }
+    fetch(`http://localhost:3001/api/system-stats/stats/${serverName}`, {
+      headers: { 'x-api-key': 'test' }
     })
       .then(response => response.json())
       .then(data => setStats(data))
@@ -19,9 +17,8 @@ const ServerStatus = () => {
 
     const intervalId = setInterval(fetchStats, 10000);
 
-
     return () => clearInterval(intervalId);
-  }, []);
+  }, [serverName]);
 
   const totalMemory = stats.memory.total || 1;
   const usedMemoryPercent = ((stats.memory.used / totalMemory) * 100).toFixed(2);
@@ -60,7 +57,7 @@ const ServerStatus = () => {
       <div className="drop-shadow-xl p-6 bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col justify-center h-48 overflow-hidden">
         <dl className="space-y-2">
           <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">CPU Usage</dt>
-          <dd className="text-5xl font-light md:text-6xl dark:text-white">{(stats.cpu.reduce((total, cpu) => total + cpu.usage, 0) / stats.cpu.length || 0).toFixed(2)}%</dd>
+          <dd className="text-5xl font-light md:text-6xl dark:text-white">{(stats.cpu.reduce((total, cpu) => total + cpu.usage, 0) * stats.cpu.length || 0).toFixed(2)}%</dd>
         </dl>
       </div>
 

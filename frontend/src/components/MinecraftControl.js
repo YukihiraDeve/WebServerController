@@ -1,17 +1,14 @@
-// MinecraftControl.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import 'tailwindcss/tailwind.css';
 import '../App.css';
 
-const MinecraftControl = () => {
+const MinecraftControl = ({ serverName }) => {
   const [apiKey, setApiKey] = useState('test');
 
   const startServer = () => {
-    axios.post('http://localhost:3001/api/minecraft/start', {}, {
-      headers: {
-        'x-api-key': apiKey
-      }
+    axios.post(`http://localhost:3001/api/minecraft/start/${serverName}`, {}, {
+      headers: { 'x-api-key': apiKey }
     })
     .then(response => {
       alert('Server started successfully: ' + response.data.message);
@@ -23,10 +20,8 @@ const MinecraftControl = () => {
   };
 
   const restartServer = () => {
-    axios.post('http://localhost:3001/api/minecraft/restart', {}, {
-      headers: {
-        'x-api-key': apiKey
-      }
+    axios.post(`http://localhost:3001/api/minecraft/restart/${serverName}`, {}, {
+      headers: { 'x-api-key': apiKey }
     })
     .then(response => {
       alert('Server restarted successfully: ' + response.data.message);
@@ -38,10 +33,8 @@ const MinecraftControl = () => {
   };
 
   const stopServer = () => {
-    axios.post('http://localhost:3001/api/minecraft/stop', {}, {
-      headers: {
-        'x-api-key': apiKey
-      }
+    axios.post(`http://localhost:3001/api/minecraft/shutdown/${serverName}`, {}, {
+      headers: { 'x-api-key': apiKey }
     })
     .then(response => {
       alert('Server stopped successfully: ' + response.data.message);

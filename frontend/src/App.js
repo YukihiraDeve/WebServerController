@@ -1,17 +1,22 @@
 import React from 'react';
-import MinecraftControl from './components/MinecraftControl';
-import ServerStatus from './components/ServerStatus';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import ServerList from './components/ServerList';
+import ServerPanel from './pages/ServerPanel';
 
 function App() {
   return (
-    <div className="min-h-screen body-bg items-start grid grid-cols-12 gap-4">
-      <div className='col-span-9'>
-        <ServerStatus />
+    <Router>
+      <div className="min-h-screen body-bg">
+          <ul className="flex space-x-4">
+          </ul>
+        <div className="p-4">
+          <Routes>
+            <Route path="/server/:serverName" element={<ServerPanel />} />
+            <Route path="/" element={<ServerList />} />
+          </Routes>
+        </div>
       </div>
-      <div className='col-span-3'>
-        <MinecraftControl />
-      </div>
-    </div>
+    </Router>
   );
 }
 

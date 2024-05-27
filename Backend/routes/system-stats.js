@@ -1,15 +1,15 @@
-// minecraft.js
 const express = require('express');
 const router = express.Router();
 const shell = require('shelljs');
 const os = require('os');
 
-router.get('/stats', (req, res) => {
+router.get('/stats/:serverName', (req, res) => {
+  const { serverName } = req.params;
 
   const totalMemory = os.totalmem();
   const freeMemory = os.freemem();
   const usedMemory = totalMemory - freeMemory;
-  
+
   const cpus = os.cpus();
   const cpuUsage = cpus.map(cpu => {
     const times = cpu.times;
@@ -20,8 +20,8 @@ router.get('/stats', (req, res) => {
       usage: 1 - (times.idle / total)
     };
   });
-  
-  const diskUsage = shell.exec('df -h /', { silent: true }).stdout;
+
+  const diskUsage = shell.exec(`df -h /path/to/${serverName}`, { silent: true }).stdout;
 
   res.json({
     memory: {

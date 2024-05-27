@@ -3,19 +3,27 @@ import axios from 'axios';
 import 'tailwindcss/tailwind.css';
 
 const MinecraftControl = () => {
-  const startServer = () => {
-    axios.post('http://localhost:3001/api/minecraft/start')
-      .then(response => {
-        alert('Server started successfully: ' + response.data.message);
-      })
-      .catch(error => {
-        console.error('Error starting server:', error);
-        alert('Error starting server: ' + (error.response?.data?.message || error.message));
-      });
-  };
+    const startServer = () => {
+        axios.post('http://localhost:3001/api/minecraft/start', {}, {
+          headers: {
+            'x-api-key': 'test1123'
+          }
+        })
+        .then(response => {
+          alert('Server started successfully: ' + response.data.message);
+        })
+        .catch(error => {
+          console.error('Error starting server:', error);
+          alert('Error starting server: ' + (error.response?.data?.message || error.message));
+        });
+      };
 
   const restartServer = () => {
-    axios.post('http://localhost:3001/api/minecraft/restart')
+    axios.post('http://localhost:3001/api/minecraft/restart',{}, {
+        headers: {
+          'x-api-key': 'test1123'
+        }
+      })
       .then(response => {
         alert('Server restarted successfully: ' + response.data.message);
       })
@@ -26,7 +34,11 @@ const MinecraftControl = () => {
   }
 
   const stopServer = () => {
-    axios.post('http://localhost:3001/api/minecraft/stop')
+    axios.post('http://localhost:3001/api/minecraft/stop',{}, {
+        headers: {
+          'x-api-key': 'test1123'
+        }
+      })
       .then(response => {
         alert('Server stopped successfully: ' + response.data.message);
       })

@@ -1,19 +1,48 @@
+/* App.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 
 .body-bg {
     background-image: url('./assets/background2.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-  }
+}
 
-  html, body {
+html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-  }
+}
 
-  
+.relative {
+    position: relative;
+}
+
+.absolute {
+    position: absolute;
+}
+
+.inset-0 {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.opacity-50 {
+    opacity: 0.5;
+}
+
+.bg-white {
+    background-color: white;
+}
+
+.bg-gray-900 {
+    background-color: #1a202c;
+}
+
+.rounded-2xl {
+    border-radius: 1rem;
+}

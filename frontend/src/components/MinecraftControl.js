@@ -53,22 +53,23 @@ const MinecraftControl = () => {
   };
 
   return (
-    <div className="bg-red-200 bg-opacity-50 rounded-lg p-4 flex flex-col space-y-4 mr-10 mt-10">
+    <div className="drop-shadow-xl relative p-6 bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col space-y-2 mr-10 mt-10">
+      <div className="absolute inset-0 bg-white dark:bg-gray-900 opacity-50 rounded-2xl"></div>
       <button
         onClick={startServer}
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        className="relative bg-blue-500 text-white font-bold py-2 px-4 rounded transition duration-700 ease-in-out hover:bg-blue-700"
       >
         Start Minecraft Server
       </button>
       <button
         onClick={restartServer}
-        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+        className="relative bg-green-500 text-white font-bold py-2 px-4 rounded transition duration-700 ease-in-out hover:bg-green-700"
       >
         Restart Minecraft Server
       </button>
       <button
         onClick={stopServer}
-        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+        className="relative bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-700 ease-in-out"
       >
         Stop Minecraft Server
       </button>

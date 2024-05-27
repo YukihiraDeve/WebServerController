@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import ServerList from './components/ServerList';
 import ServerPanel from './pages/ServerPanel';
 
+
 function App() {
   return (
     <Router>

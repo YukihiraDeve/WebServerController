@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
+
 const ServerStatus = ({ serverName }) => {
   const [stats, setStats] = useState({ memory: {}, cpu: [], storage: '' });
 
   const fetchStats = () => {
-    fetch(`http://localhost:3001/api/system-stats/stats/${serverName}`, {
+    fetch(`http://172.16.173.137:3001/api/system-stats/stats/${serverName}`, {
       headers: { 'x-api-key': 'test' }
     })
       .then(response => response.json())

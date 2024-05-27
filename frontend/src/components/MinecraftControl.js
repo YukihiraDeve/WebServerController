@@ -3,11 +3,13 @@ import axios from 'axios';
 import 'tailwindcss/tailwind.css';
 import '../App.css';
 
+
+
 const MinecraftControl = ({ serverName }) => {
   const [apiKey, setApiKey] = useState('test');
 
   const startServer = () => {
-    axios.post(`http://localhost:3001/api/minecraft/start/${serverName}`, {}, {
+    axios.post(`http://172.16.173.137:3001/api/minecraft/start/${serverName}`, {}, {
       headers: { 'x-api-key': apiKey }
     })
     .then(response => {
@@ -20,7 +22,7 @@ const MinecraftControl = ({ serverName }) => {
   };
 
   const restartServer = () => {
-    axios.post(`http://localhost:3001/api/minecraft/restart/${serverName}`, {}, {
+    axios.post(`http://172.16.173.137:3001/api/minecraft/restart/${serverName}`, {}, {
       headers: { 'x-api-key': apiKey }
     })
     .then(response => {
@@ -33,7 +35,7 @@ const MinecraftControl = ({ serverName }) => {
   };
 
   const stopServer = () => {
-    axios.post(`http://localhost:3001/api/minecraft/shutdown/${serverName}`, {}, {
+    axios.post(`http://172.16.173.137:3001/api/minecraft/shutdown/${serverName}`, {}, {
       headers: { 'x-api-key': apiKey }
     })
     .then(response => {

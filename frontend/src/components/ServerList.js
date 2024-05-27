@@ -13,7 +13,7 @@ const ServerList = () => {
   }, []);
 
   const fetchServers = () => {
-    axios.get('http://localhost:3001/api/minecraft/list', {
+    axios.get(`http://172.16.173.137:3001/api/minecraft/list`, {
       headers: { 'x-api-key': apiKey }
     })
     .then(response => setServers(response.data))
@@ -21,7 +21,7 @@ const ServerList = () => {
   };
 
   const handleCreateServer = () => {
-    axios.post('http://localhost:3001/api/minecraft/create', { serverName }, {
+    axios.post(`http://172.16.173.137:3001/api/minecraft/create`, { serverName }, {
       headers: { 'x-api-key': apiKey }
     })
     .then(response => {

@@ -7,7 +7,9 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.2",
+    "path-browserify": "^1.0.1",
     "react": "^18.3.1",
+    "react-app-rewired": "^2.2.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
@@ -38,7 +40,16 @@
     ]
   },
   "devDependencies": {
-    "tailwindcss": "^3.4.3"
+    "assert": "^2.1.0",
+    "buffer": "^6.0.3",
+    "crypto-browserify": "^3.12.0",
+    "https-browserify": "^1.0.0",
+    "os-browserify": "^0.3.0",
+    "process": "^0.11.10",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "tailwindcss": "^3.4.3",
+    "url": "^0.11.3"
   },
   "proxy": "http://localhost:3001"
 }

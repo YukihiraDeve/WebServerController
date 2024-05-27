@@ -53,23 +53,23 @@ const MinecraftControl = () => {
   };
 
   return (
-    <div className="drop-shadow-xl relative p-6 bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col space-y-2 mr-10 mt-10">
+    <div className="drop-shadow-xl relative p-6 bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col space-y-4 mr-10 mt-10">
       <div className="absolute inset-0 bg-white dark:bg-gray-900 opacity-50 rounded-2xl"></div>
       <button
         onClick={startServer}
-        className="relative bg-blue-500 text-white font-bold py-2 px-4 rounded transition duration-700 ease-in-out hover:bg-blue-700"
+        className="relative text-white font-bold py-2 px-4 rounded transition-all duration-700 ease-in-out bg-[length:200%_200%] bg-gradient-to-r from-blue-400 to-blue-200 hover:from-blue-500 hover:to-green-400"
       >
         Start Minecraft Server
       </button>
       <button
         onClick={restartServer}
-        className="relative bg-green-500 text-white font-bold py-2 px-4 rounded transition duration-700 ease-in-out hover:bg-green-700"
+        className="relative text-white font-bold py-2 px-4 rounded transition-all duration-700 ease-in-out bg-[length:200%_200%] bg-gradient-to-r from-green-500 to-teal-500 hover:from-teal-500 hover:to-green-500"
       >
         Restart Minecraft Server
       </button>
       <button
         onClick={stopServer}
-        className="relative bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-700 ease-in-out"
+        className="relative text-white font-bold py-2 px-4 rounded transition-all duration-700 ease-in-out bg-[length:200%_200%] bg-gradient-to-r from-red-500 to-pink-500 hover:from-pink-500 hover:to-red-500"
       >
         Stop Minecraft Server
       </button>

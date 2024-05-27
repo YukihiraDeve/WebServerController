@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 const ServerStatus = () => {
   const [stats, setStats] = useState({ memory: {}, cpu: [], storage: '' });
 
-  useEffect(() => {
+  const fetchStats = () => {
     fetch('http://localhost:3001/api/system-stats/stats', {
       headers: {
         'x-api-key': 'test'
@@ -12,20 +12,28 @@ const ServerStatus = () => {
       .then(response => response.json())
       .then(data => setStats(data))
       .catch(error => console.error('Error fetching system stats:', error));
+  };
+
+  useEffect(() => {
+    fetchStats();
+
+    const intervalId = setInterval(fetchStats, 10000);
+
+
+    return () => clearInterval(intervalId);
   }, []);
 
   const totalMemory = stats.memory.total || 1;
   const usedMemoryPercent = ((stats.memory.used / totalMemory) * 100).toFixed(2);
   const freeMemoryPercent = ((stats.memory.free / totalMemory) * 100).toFixed(2);
 
-  // Extraire le stockage disponible en pourcentage
   const extractStorageFreePercentage = (storageString) => {
     try {
       const lines = storageString.split('\n');
       const relevantLine = lines.find(line => line.startsWith('/dev'));
       if (relevantLine) {
         const columns = relevantLine.trim().split(/\s+/);
-        const capacity = columns[4]; // Assuming "Capacity" is at index 4
+        const capacity = columns[4];
         return (100 - parseInt(capacity.replace('%', ''), 10)).toFixed(2);
       }
       return 'N/A';
@@ -44,9 +52,7 @@ const ServerStatus = () => {
         <dl className="space-y-2">
           <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Memory Usage</dt>
           <dd className="text-5xl font-light md:text-6xl dark:text-white">{usedMemoryPercent}%</dd>
-          <dd className="flex items-center space-x-1 text-sm font-medium text-green-500 dark:text-green-400">
-
-          </dd>
+          <dd className="flex items-center space-x-1 text-sm font-medium text-green-500 dark:text-green-400"></dd>
         </dl>
       </div>
 

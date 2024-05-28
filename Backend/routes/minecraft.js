@@ -6,7 +6,7 @@ let servers = ["test"];
 
 router.post('/start/:serverName', (req, res) => {
   const { serverName } = req.params;
-  shell.exec(`ls`, (code, stdout, stderr) => {
+  shell.exec(`./scripts/starServer.sh ${serverName}`, (code, stdout, stderr) => {
     if (code) {
       res.status(500).send({ message: 'Failed to start the Minecraft server', error: stderr });
     } else {
@@ -17,7 +17,7 @@ router.post('/start/:serverName', (req, res) => {
 
 router.post('/restart/:serverName', (req, res) => {
   const { serverName } = req.params;
-  shell.exec(`./scripts/restartServer ${serverName}`, (code, stdout, stderr) => {
+  shell.exec(`./scripts/restartServer.sh ${serverName}`, (code, stdout, stderr) => {
     if (code) {
       res.status(500).send({ message: 'Failed to restart the Minecraft server', error: stderr });
     } else {
@@ -28,7 +28,7 @@ router.post('/restart/:serverName', (req, res) => {
 
 router.post('/shutdown/:serverName', (req, res) => {
   const { serverName } = req.params;
-  shell.exec(`./scripts/shutdownServer ${serverName}`, (code, stdout, stderr) => {
+  shell.exec(`./scripts/shutdownServer.sh ${serverName}`, (code, stdout, stderr) => {
     if (code) {
       res.status(500).send({ message: 'Failed to shutdown the Minecraft server', error: stderr });
     } else {
@@ -39,7 +39,7 @@ router.post('/shutdown/:serverName', (req, res) => {
 
 router.post('/create', (req, res) => {
   const { serverName } = req.body;
-  shell.exec(`./scripts/createServer ${serverName}`, (code, stdout, stderr) => {
+  shell.exec(`./scripts/createServer.sh ${serverName}`, (code, stdout, stderr) => {
     if (code) {
       res.status(500).send({ message: 'Failed to create the Minecraft server', error: stderr });
     } else {

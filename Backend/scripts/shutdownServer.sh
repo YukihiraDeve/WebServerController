@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Vérifier que le nom du serveur est fourni
 if [ -z "$1" ]; then
   echo "Usage: $0 <serverName>"
   exit 1
@@ -23,8 +24,7 @@ fi
 SERVER_PID=$(cat "$SERVER_PID_FILE")
 
 echo "Stopping Minecraft server: $SERVER_NAME"
-screen -S "$SERVER_NAME" -p 0 -X stuff "stop\n"
-
+kill "$SERVER_PID"
 
 sleep 10
 
@@ -33,7 +33,6 @@ if ps -p "$SERVER_PID" > /dev/null; then
   exit 1
 fi
 
-# Supprimer le fichier PID
 rm -f "$SERVER_PID_FILE"
 
 echo "Server $SERVER_NAME stopped successfully!"

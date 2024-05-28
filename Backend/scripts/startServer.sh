@@ -13,8 +13,7 @@ MAX_MEMORY="2048M"
 SERVER_LOG="$MINECRAFT_DIR/server.log"
 PID_FILE="$MINECRAFT_DIR/server.pid"
 STARTED_MSG="Done"
-TIMEOUT=120  # Timeout de 2 minutes
-
+TIMEOUT=120 
 
 if [ ! -d "$MINECRAFT_DIR" ]; then
   echo "Server directory does not exist: $MINECRAFT_DIR"
@@ -24,7 +23,8 @@ fi
 cd "$MINECRAFT_DIR" || exit 1
 
 echo "Starting Minecraft server: $SERVER_NAME"
-screen -dmS "$SERVER_NAME" bash -c "java -Xms$MEMORY -Xmx$MAX_MEMORY -jar $SERVER_JAR nogui > $SERVER_LOG 2>&1 & echo \$! > $PID_FILE"
+nohup java -Xms$MEMORY -Xmx$MAX_MEMORY -jar "$SERVER_JAR" nogui > "$SERVER_LOG" 2>&1 &
+echo $! > "$PID_FILE"
 
 echo "Waiting for server to start..."
 end=$((SECONDS + TIMEOUT))
@@ -36,7 +36,7 @@ while ! grep -q "$STARTED_MSG" "$SERVER_LOG"; do
   sleep 1
 done
 
-# Vérifier si le processus existe toujours
+
 if ! kill -0 $(cat "$PID_FILE") 2> /dev/null; then
   echo "Server process ended prematurely."
   exit 1

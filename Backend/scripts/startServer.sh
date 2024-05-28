@@ -1,12 +1,10 @@
 #!/bin/bash
 
-# Vérifier que le nom du serveur est fourni
 if [ -z "$1" ]; then
   echo "Usage: $0 <serverName>"
   exit 1
 fi
 
-# Variables
 SERVER_NAME="$1"
 MINECRAFT_DIR="/servers/$SERVER_NAME"
 SERVER_JAR="server.jar"

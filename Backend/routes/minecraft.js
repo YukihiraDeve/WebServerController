@@ -54,7 +54,6 @@ router.get('/list', (req, res) => {
       if (code) {
         res.status(500).send({ message: 'Failed to list Minecraft servers', error: stderr });
       } else {
-        // Split the output by newlines to create an array of server names
         const serverList = stdout.split('\n').filter(line => line.trim() !== '');
         res.json(serverList);
       }
@@ -72,5 +71,6 @@ router.get('/list', (req, res) => {
       }
     });
   });
+
 
 module.exports = router;

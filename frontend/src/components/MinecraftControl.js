@@ -1,12 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import 'tailwindcss/tailwind.css';
 import '../App.css';
 
-
-
 const MinecraftControl = ({ serverName }) => {
   const [apiKey, setApiKey] = useState('test');
+  const [serverStatus, setServerStatus] = useState('off'); // 'off' or 'on'
+
+  useEffect(() => {
+    checkServerStatus();
+  }, []);
+
+  const checkServerStatus = () => {
+    axios.get(`http://172.16.173.137:3001/api/minecraft/status/${serverName}`, {
+      headers: { 'x-api-key': apiKey }
+    })
+    .then(response => {
+      setServerStatus(response.data.status); // Mettre à jour le statut selon la réponse du serveur
+    })
+    .catch(error => {
+      console.error('Error checking server status:', error);
+      alert('Error checking server status: ' + (error.response?.data?.message || error.message));
+    });
+  };
 
   const startServer = () => {
     axios.post(`http://172.16.173.137:3001/api/minecraft/start/${serverName}`, {}, {
@@ -14,6 +30,7 @@ const MinecraftControl = ({ serverName }) => {
     })
     .then(response => {
       alert('Server started successfully: ' + response.data.message);
+      setServerStatus('on'); // Update state to 'on'
     })
     .catch(error => {
       console.error('Error starting server:', error);
@@ -27,6 +44,7 @@ const MinecraftControl = ({ serverName }) => {
     })
     .then(response => {
       alert('Server restarted successfully: ' + response.data.message);
+      setServerStatus('on'); // Keep state 'on' as server is restarted not stopped
     })
     .catch(error => {
       console.error('Error restarting server:', error);
@@ -40,6 +58,7 @@ const MinecraftControl = ({ serverName }) => {
     })
     .then(response => {
       alert('Server stopped successfully: ' + response.data.message);
+      setServerStatus('off'); // Update state to 'off'
     })
     .catch(error => {
       console.error('Error stopping server:', error);
@@ -50,24 +69,29 @@ const MinecraftControl = ({ serverName }) => {
   return (
     <div className="drop-shadow-xl relative p-6 bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col space-y-4 mr-10 mt-10">
       <div className="absolute inset-0 bg-white dark:bg-gray-900 opacity-50 rounded-2xl"></div>
-      <button
-        onClick={startServer}
-        className="relative text-white font-bold py-2 px-4 rounded transition-all duration-700 ease-in-out bg-[length:200%_200%] bg-gradient-to-r from-blue-400 to-blue-200 hover:from-blue-500 hover:to-green-400"
-      >
-        Start Minecraft Server
-      </button>
-      <button
-        onClick={restartServer}
-        className="relative text-white font-bold py-2 px-4 rounded transition-all duration-700 ease-in-out bg-[length:200%_200%] bg-gradient-to-r from-green-500 to-teal-500 hover:from-teal-500 hover:to-green-500"
-      >
-        Restart Minecraft Server
-      </button>
-      <button
-        onClick={stopServer}
-        className="relative text-white font-bold py-2 px-4 rounded transition-all duration-700 ease-in-out bg-[length:200%_200%] bg-gradient-to-r from-red-500 to-pink-500 hover:from-pink-500 hover:to-red-500"
-      >
-        Stop Minecraft Server
-      </button>
+      {serverStatus === 'off' ? (
+        <button
+          onClick={startServer}
+          className="relative text-white font-bold py-2 px-4 rounded transition-all duration-700 ease-in-out bg-[length:200%_200%] bg-gradient-to-r from-blue-400 to-blue-200 hover:from-blue-500 hover:to-green-400"
+        >
+          Start Minecraft Server
+        </button>
+      ) : (
+        <>
+          <button
+            onClick={restartServer}
+            className="relative text-white font-bold py-2 px-4 rounded transition-all duration-700 ease-in-out bg-[length:200%_200%] bg-gradient-to-r from-green-500 to-teal-500 hover:from-teal-500 hover:to-green-500"
+          >
+            Restart Minecraft Server
+          </button>
+          <button
+            onClick={stopServer}
+            className="relative text-white font-bold py-2 px-4 rounded transition-all duration-700 ease-in-out bg-[length:200%_200%] bg-gradient-to-r from-red-500 to-pink-500 hover:from-pink-500 hover:to-red-500"
+          >
+            Stop Minecraft Server
+          </button>
+        </>
+      )}
     </div>
   );
 };

@@ -61,4 +61,16 @@ router.get('/list', (req, res) => {
     });
   });
 
+
+  router.get('/status/:serverName', (req, res) => {
+    const { serverName } = req.params;
+    shell.exec(`./scripts/checkServerStatus.sh ${serverName}`, (code, stdout, stderr) => {
+      if (code) {
+        res.send({ status: 'off', message: stdout });
+      } else {
+        res.send({ status: 'on', message: stdout });
+      }
+    });
+  });
+
 module.exports = router;

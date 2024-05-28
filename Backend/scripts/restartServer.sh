@@ -15,7 +15,7 @@ if [ ! -d "$MINECRAFT_DIR" ]; then
 fi
 
 echo "Shutting down Minecraft server: $SERVER_NAME"
-bash ./shutdownServer "$SERVER_NAME"
+bash ./scripts/shutdownServer.sh "$SERVER_NAME"
 
 echo "Restarting Minecraft server: $SERVER_NAME"
-bash ./startServer "$SERVER_NAME"
+bash ./scripts/startServer.sh "$SERVER_NAME"

@@ -6,7 +6,7 @@ let servers = ["test"];
 
 router.post('/start/:serverName', (req, res) => {
   const { serverName } = req.params;
-  shell.exec(`./scripts/starServer.sh ${serverName}`, (code, stdout, stderr) => {
+  shell.exec(`./scripts/startServer.sh ${serverName}`, (code, stdout, stderr) => {
     if (code) {
       res.status(500).send({ message: 'Failed to start the Minecraft server', error: stderr });
     } else {

@@ -50,7 +50,7 @@ router.post('/create', (req, res) => {
 });
 
 router.get('/list', (req, res) => {
-    shell.exec('./scripts/listServers.sh', (code, stdout, stderr) => {
+    shell.exec('./scripts/listServer.sh', (code, stdout, stderr) => {
       if (code) {
         res.status(500).send({ message: 'Failed to list Minecraft servers', error: stderr });
       } else {

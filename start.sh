@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "API_SECRET_KEY=test" > Bcd .ackend/.env
+echo "API_SECRET_KEY=test" > Backend/.env
 
 
 chmod -R 777 Backend/scripts/*.sh

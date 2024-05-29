@@ -8,7 +8,8 @@ fi
 
 serverName=$1
 worldName=$2
-jmc2objPath="../export/jMc2Obj-124.jar"
+scriptDir=$(dirname "$(readlink -f "$0")")
+jmc2objPath="$scriptDir/../export/jMc2Obj-124.jar"
 worldPath="/servers/$serverName/$worldName"
 outputDir="/servers/$serverName/exports"
 outputFile="$outputDir/$worldName.obj"

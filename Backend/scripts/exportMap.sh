@@ -24,9 +24,9 @@ sleep 5
 
 # V  rifier si la commande a r  ussi
 if [ $? -eq 0 ]; then
-    echo "Modeling good : $outputFile"
+    echo "[INFO Model] Exportation réussie : $outputFile"
     exit 0
 else
-  echo "Erreur lors dans le modeling" >&2
+  echo "[ERROR Model] Erreur lors dans le modeling" >&2
   exit 1
 fi

@@ -20,7 +20,7 @@ fi
 # Télécharger le fichier jar du serveur
 cd "$MINECRAFT_DIR" || exit 1
 if [ ! -f "server.jar" ]; then
-  echo "Downloading Minecraft server jar..."
+  echo "[INFO] Downloading Minecraft server jar..."
   wget -O server.jar "$SERVER_JAR_URL"
 fi
 
@@ -40,4 +40,4 @@ EOL
 touch server.log
 
 # Indiquer que le serveur a été créé
-echo "Minecraft server $SERVER_NAME created successfully!"
+echo "[INFO Create]Minecraft server $SERVER_NAME created successfully!"

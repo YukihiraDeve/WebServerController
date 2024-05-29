@@ -10,6 +10,6 @@ if [ -d "$SERVER_DIR" ]; then
     fi
   done
 else
-  echo "Le répertoire $SERVER_DIR n'existe pas."
+  echo "[INFO] Le répertoire $SERVER_DIR n'existe pas."
   exit 1
 fi

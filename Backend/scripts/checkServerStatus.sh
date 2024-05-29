@@ -11,7 +11,7 @@ PID_FILE="$MINECRAFT_DIR/server.pid"
 
 # Vérifier si le fichier PID existe
 if [ ! -f "$PID_FILE" ]; then
-  echo "Server $SERVER_NAME is not running."
+  echo "[INFO] Server $SERVER_NAME is not running."
   exit 1
 fi
 
@@ -20,9 +20,9 @@ PID=$(cat "$PID_FILE")
 
 # Vérifier si le processus avec le PID est en cours d'exécution
 if ps -p $PID > /dev/null; then
-  echo "Server $SERVER_NAME is running."
+  echo "[INFO] Server $SERVER_NAME is running."
   exit 0
 else
-  echo "Server $SERVER_NAME is not running."
+  echo "[INFO] Server $SERVER_NAME is not running."
   exit 1
 fi

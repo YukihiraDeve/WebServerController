@@ -16,21 +16,21 @@ STARTED_MSG="Done"
 TIMEOUT=120 
 
 if [ ! -d "$MINECRAFT_DIR" ]; then
-  echo "Server directory does not exist: $MINECRAFT_DIR"
+  echo "[ERROR] Server directory does not exist: $MINECRAFT_DIR"
   exit 1
 fi
 
 cd "$MINECRAFT_DIR" || exit 1
 
-echo "Starting Minecraft server: $SERVER_NAME"
+echo "[INFO] Starting Minecraft server: $SERVER_NAME"
 nohup java -Xms$MEMORY -Xmx$MAX_MEMORY -jar "$SERVER_JAR" nogui > "$SERVER_LOG" 2>&1 &
 echo $! > "$PID_FILE"
 
-echo "Waiting for server to start..."
+echo "[INFO] Waiting for server to start..."
 end=$((SECONDS + TIMEOUT))
 while ! grep -q "$STARTED_MSG" "$SERVER_LOG"; do
   if [ $SECONDS -gt $end ]; then
-    echo "Server $SERVER_NAME failed to start within $TIMEOUT seconds."
+    echo "[ERROR $SERVER_NAME] Server $SERVER_NAME failed to start within $TIMEOUT seconds."
     exit 1
   fi
   sleep 1
@@ -38,8 +38,8 @@ done
 
 
 if ! kill -0 $(cat "$PID_FILE") 2> /dev/null; then
-  echo "Server process ended prematurely."
+  echo "ERROR $SERVER_NAME] Server process ended prematurely."
   exit 1
 fi
 
-echo "Server $SERVER_NAME started successfully!"
+echo "[INFO] Server $SERVER_NAME started successfully!"

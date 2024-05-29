@@ -17,16 +17,27 @@ const MinecraftModel = ({ url }) => {
   );
 };
 
-const MinecraftModelLoader = ({ serverName, worldName }) => {
+const MinecraftModelLoader = ({ serverName, worldName  = "world"}) => {
   const [url, setUrl] = useState(null);
+  const [apiKey, setApiKey] = useState('test');
 
   useEffect(() => {
     const fetchUrl = `http://172.16.173.137:3001/api/minecraft/export/${serverName}/${worldName}`;
-    fetch(fetchUrl, { method: 'POST' })
-      .then((response) => response.blob())
+    fetch(fetchUrl, { method: 'POST', headers: {'x-api-key': apiKey }}) 
+      .then((response) => {
+        if (!response.ok) {
+          console.error('Network response was not ok', response.statusText);
+          throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        return response.blob();
+      })
       .then((blob) => {
         const url = URL.createObjectURL(blob);
         setUrl(url);
+      })
+      .catch((error) => {
+        console.error('Fetch error:', error);
+        alert('Error fetching OBJ file: ' + error.message);
       });
   }, [serverName, worldName]);
 

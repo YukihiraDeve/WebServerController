@@ -21,7 +21,7 @@ const MinecraftModelLoader = ({ serverName, worldName }) => {
   const [url, setUrl] = useState(null);
 
   useEffect(() => {
-    const fetchUrl = `http://localhost:3001/api/minecraft/export/${serverName}/${worldName}`;
+    const fetchUrl = `http://172.16.173.137:3001/api/minecraft/export/${serverName}/${worldName}`;
     fetch(fetchUrl, { method: 'POST' })
       .then((response) => response.blob())
       .then((blob) => {

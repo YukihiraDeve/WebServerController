@@ -51,7 +51,7 @@ router.post('/create', (req, res) => {
 
 router.post('/export/:serverName/:worldName?', (req, res) => {
     const { serverName, worldName = 'world' } = req.params;
-    const outputDir = `/servers/${serverName}/exports`;
+    const outputDir = `../export/${serverName}`;
     shell.exec(`./scripts/exportMap.sh ${serverName} ${worldName}`, (code, stdout, stderr) => {
       if (code) {
         res.status(500).send({ message: 'Failed to export the Minecraft world', error: stderr });

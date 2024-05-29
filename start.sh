@@ -7,3 +7,5 @@ chmod -R 777 Backend/scripts/*.sh
 
 cd Backend
 npm install
+
+node app.js

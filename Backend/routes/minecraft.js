@@ -57,13 +57,15 @@ router.post('/export/:serverName/:worldName?', (req, res) => {
       if (code) {
         res.status(500).send({ message: 'Failed to export the Minecraft world', error: stderr });
       } else {
-        const outputDir = `/servers/${serverName}/exports`;
-        const filePath = path.join(outputDir, `${worldName}.obj`);
-        res.download(filePath, `${worldName}.obj`, (err) => {
-          if (err) {
-            console.error('Error sending file:', err);
-            res.status(500).send({ message: 'Error sending file', error: err });
-             }
+        shell.exec(`./scripts/mooveMap.sh ${serverName} ${worldName}`, (code, stdout, stderr) => {
+            const outputDir = `/servers/${serverName}/exports`;
+            const filePath = path.join(outputDir, `${worldName}.obj`);
+            res.download(filePath, `${worldName}.obj`, (err) => {
+            if (err) {
+                console.error('Error sending file:', err);
+                res.status(500).send({ message: 'Error sending file', error: err });
+                }
+            });
         });
     }})
   });

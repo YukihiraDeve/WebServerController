@@ -20,13 +20,13 @@ mkdir -p $outputDir
 # Ex  cuter la commande jMc2Obj
 java -jar $jmc2objPath $worldPath
 
+sleep 5
+
 # V  rifier si la commande a r  ussi
 if [ $? -eq 0 ]; then
-  echo "Exportation r  ussie : $outputFile"
-    mv "minecraft.obj" "$outputDir/$worldName.obj"
-    mv "minecraft.mtl" "$outputDir/$worldName.mtl"
+    echo "Modeling good : $outputFile"
     exit 0
 else
-  echo "Erreur lors de l'exportation" >&2
+  echo "Erreur lors dans le modeling" >&2
   exit 1
 fi

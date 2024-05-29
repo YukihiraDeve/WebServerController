@@ -1,6 +1,6 @@
 import React, { Suspense, useRef, useState, useEffect } from 'react';
 import { Canvas, useLoader } from '@react-three/fiber';
-import { OrbitControls, useProgress, Html } from '@react-three/drei';
+import { OrbitControls, useProgress, Html, Sky } from '@react-three/drei';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 
 const Loader = () => {
@@ -13,7 +13,7 @@ const MinecraftModel = ({ url }) => {
   const ref = useRef();
 
   return (
-    <primitive object={obj} ref={ref} scale={[0.1, 0.1, 0.1]} />
+    <primitive object={obj} ref={ref} scale={[1, 1, 1]} />
   );
 };
 

@@ -3,7 +3,6 @@ import { Canvas, useLoader } from '@react-three/fiber';
 import { OrbitControls, useProgress, Html } from '@react-three/drei';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
-import JSZip from 'jszip';
 
 const Loader = () => {
   const { progress } = useProgress();
@@ -11,15 +10,14 @@ const Loader = () => {
 };
 
 const MinecraftModel = ({ objUrl, mtlUrl }) => {
+  // Ensure useLoader is directly within a component rendered by Canvas
   const materials = useLoader(MTLLoader, mtlUrl);
   const obj = useLoader(OBJLoader, objUrl, loader => {
     loader.setMaterials(materials);
   });
-  const ref = useRef();
 
-  return (
-    <primitive object={obj} ref={ref} scale={[1, 1, 1]} />
-  );
+  const ref = useRef();
+  return <primitive object={obj} ref={ref} scale={[1, 1, 1]} />;
 };
 
 const MinecraftModelLoader = ({ serverName, worldName = "world" }) => {
@@ -29,39 +27,22 @@ const MinecraftModelLoader = ({ serverName, worldName = "world" }) => {
 
   useEffect(() => {
     const fetchUrl = `http://172.16.173.137:3001/api/minecraft/export/${serverName}/${worldName}`;
+    
     fetch(fetchUrl, { method: 'POST', headers: {'x-api-key': 'test' }})
-      .then((response) => {
+      .then(response => {
         if (!response.ok) {
           console.error('Network response was not ok', response.statusText);
           throw new Error('Network response was not ok: ' + response.statusText);
         }
-        return response.blob();
+        return response.json();
       })
-      .then((blob) => {
-        const zip = new JSZip();
-        return zip.loadAsync(blob);
-      })
-      .then((zip) => {
-        const objFile = Object.keys(zip.files).find((filename) => filename.endsWith('.obj'));
-        const mtlFile = Object.keys(zip.files).find((filename) => filename.endsWith('.mtl'));
-
-        if (objFile && mtlFile) {
-          // Process OBJ file
-          return Promise.all([
-            zip.file(objFile).async("blob").then(blob => URL.createObjectURL(blob)),
-            zip.file(mtlFile).async("blob").then(blob => URL.createObjectURL(blob))
-          ]);
-        } else {
-          throw new Error('OBJ or MTL file not found in the zip');
-        }
-      })
-      .then(([objUrl, mtlUrl]) => {
-        setObjUrl(objUrl);
-        setMtlUrl(mtlUrl);
+      .then(({ objFile, mtlFile }) => {
+        setObjUrl(`http://172.16.173.137:3001${objFile}`);
+        setMtlUrl(`http://172.16.173.137:3001${mtlFile}`);
         setLoading(false);
       })
-      .catch((error) => {
-        console.error('Error processing zip file:', error);
+      .catch(error => {
+        console.error('Error fetching file paths:', error);
       });
   }, [serverName, worldName]);
 

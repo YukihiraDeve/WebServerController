@@ -6,25 +6,31 @@ import '../App.css';
 const MinecraftControl = ({ serverName }) => {
   const [apiKey, setApiKey] = useState('test');
   const [serverStatus, setServerStatus] = useState('off'); // 'off' or 'on'
+  const [loading, setLoading] = useState(false); // État de chargement
 
   useEffect(() => {
     checkServerStatus();
   }, []);
 
   const checkServerStatus = () => {
+    setLoading(true);
     axios.get(`http://172.16.173.137:3001/api/minecraft/status/${serverName}`, {
       headers: { 'x-api-key': apiKey }
     })
     .then(response => {
-      setServerStatus(response.data.status); // Mettre à jour le statut selon la réponse du serveur
+      setServerStatus(response.data.status);
     })
     .catch(error => {
       console.error('Error checking server status:', error);
       alert('Error checking server status: ' + (error.response?.data?.message || error.message));
+    })
+    .finally(() => {
+      setLoading(false);
     });
   };
 
   const startServer = () => {
+    setLoading(true);
     axios.post(`http://172.16.173.137:3001/api/minecraft/start/${serverName}`, {}, {
       headers: { 'x-api-key': apiKey }
     })
@@ -35,10 +41,14 @@ const MinecraftControl = ({ serverName }) => {
     .catch(error => {
       console.error('Error starting server:', error);
       alert('Error starting server: ' + (error.response?.data?.message || error.message));
+    })
+    .finally(() => {
+      setLoading(false);
     });
   };
 
   const restartServer = () => {
+    setLoading(true);
     axios.post(`http://172.16.173.137:3001/api/minecraft/restart/${serverName}`, {}, {
       headers: { 'x-api-key': apiKey }
     })
@@ -49,10 +59,14 @@ const MinecraftControl = ({ serverName }) => {
     .catch(error => {
       console.error('Error restarting server:', error);
       alert('Error restarting server: ' + (error.response?.data?.message || error.message));
+    })
+    .finally(() => {
+      setLoading(false);
     });
   };
 
   const stopServer = () => {
+    setLoading(true);
     axios.post(`http://172.16.173.137:3001/api/minecraft/shutdown/${serverName}`, {}, {
       headers: { 'x-api-key': apiKey }
     })
@@ -63,6 +77,9 @@ const MinecraftControl = ({ serverName }) => {
     .catch(error => {
       console.error('Error stopping server:', error);
       alert('Error stopping server: ' + (error.response?.data?.message || error.message));
+    })
+    .finally(() => {
+      setLoading(false);
     });
   };
 
@@ -73,22 +90,55 @@ const MinecraftControl = ({ serverName }) => {
         <button
           onClick={startServer}
           className="relative text-white font-bold py-2 px-4 rounded transition-all duration-700 ease-in-out bg-[length:200%_200%] bg-gradient-to-r from-blue-400 to-blue-200 hover:from-blue-500 hover:to-green-400"
+          disabled={loading}
         >
-          Start Minecraft Server
+          {loading ? (
+            <div className="flex items-center justify-center">
+              <svg className="animate-spin h-5 w-5 mr-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291l1.42-1.42A5.962 5.962 0 016 12H2c0 2.28.965 4.373 2.54 5.76L6 17.29z"></path>
+              </svg>
+              Loading...
+            </div>
+          ) : (
+            'Start Server'
+          )}
         </button>
       ) : (
         <>
           <button
             onClick={restartServer}
             className="relative text-white font-bold py-2 px-4 rounded transition-all duration-700 ease-in-out bg-[length:200%_200%] bg-gradient-to-r from-green-500 to-teal-500 hover:from-teal-500 hover:to-green-500"
+            disabled={loading}
           >
-            Restart Minecraft Server
+            {loading ? (
+              <div className="flex items-center justify-center">
+                <svg className="animate-spin h-5 w-5 mr-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291l1.42-1.42A5.962 5.962 0 016 12H2c0 2.28.965 4.373 2.54 5.76L6 17.29z"></path>
+                </svg>
+                Loading...
+              </div>
+            ) : (
+              'Restart Server'
+            )}
           </button>
           <button
             onClick={stopServer}
             className="relative text-white font-bold py-2 px-4 rounded transition-all duration-700 ease-in-out bg-[length:200%_200%] bg-gradient-to-r from-red-500 to-pink-500 hover:from-pink-500 hover:to-red-500"
+            disabled={loading}
           >
-            Stop Minecraft Server
+            {loading ? (
+              <div className="flex items-center justify-center">
+                <svg className="animate-spin h-5 w-5 mr-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291l1.42-1.42A5.962 5.962 0 016 12H2c0 2.28.965 4.373 2.54 5.76L6 17.29z"></path>
+                </svg>
+                Loading...
+              </div>
+            ) : (
+              'Stop Server'
+            )}
           </button>
         </>
       )}

@@ -23,6 +23,9 @@ java -jar $jmc2objPath $worldPath
 # V  rifier si la commande a r  ussi
 if [ $? -eq 0 ]; then
   echo "Exportation r  ussie : $outputFile"
+    mv "$worldPath.obj" "$outputFile"
+    mv "$worldPath.mtl" "$outputDir/$worldName.mtl"
+    exit 0
 else
   echo "Erreur lors de l'exportation" >&2
   exit 1

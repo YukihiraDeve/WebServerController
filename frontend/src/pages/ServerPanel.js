@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import MinecraftControl from '../components/MinecraftControl';
 import ServerStatus from '../components/ServerStatus';
+import MinecraftModelLoader from '../components/MinecraftModelLoader';
 
 const ServerPanel = () => {
   const { serverName } = useParams();
@@ -28,7 +29,9 @@ const ServerPanel = () => {
         <div className="col-span-3">
             <MinecraftControl serverName={serverName} />
         </div>
+        <MinecraftModelLoader serverName={serverName} />
     </div>
+
     </div>
   );
 };

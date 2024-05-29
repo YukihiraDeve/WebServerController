@@ -47,7 +47,7 @@ const MinecraftModelLoader = ({ serverName, worldName = "world" }) => {
   }, [serverName, worldName]);
 
   if (loading || !objUrl || !mtlUrl) {
-    return <Loader />;
+    return;
   }
 
   return (

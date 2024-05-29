@@ -75,8 +75,8 @@ router.post('/export/:serverName/:worldName?', (req, res) => {
       }
 
       res.json({
-        objFile: `/servers/${serverName}/${worldName}.obj`,
-        mtlFile: `/servers/${serverName}/${worldName}.mtl`
+        objFile: `/servers/${serverName}/exports/${worldName}.obj`,
+        mtlFile: `/servers/${serverName}/exports/${worldName}.mtl`
       });
     }
   });

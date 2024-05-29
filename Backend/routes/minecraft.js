@@ -70,7 +70,7 @@ router.post('/export/:serverName/:worldName?', (req, res) => {
     if (code) {
       res.status(500).send({ message: 'Failed to export the Minecraft world', error: stderr });
     } else {
-      shell.exec(`./scripts/moveMap.sh ${serverName} ${worldName}`, (code, stdout, stderr) => {
+      shell.exec(`./scripts/mooveMap.sh ${serverName} ${worldName}`, (code, stdout, stderr) => {
         if (code) {
           res.status(500).send({ message: 'Failed to move the Minecraft world maps', error: stderr });
         } else {

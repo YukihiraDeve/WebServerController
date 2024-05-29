@@ -1,9 +1,9 @@
 #!/bin/bash
 
-echo "API_SECRET_KEY=test" > backend/.env
+echo "API_SECRET_KEY=test" > Bcd .ackend/.env
 
 
-chmod -R 777 backend/scripts/*.sh
+chmod -R 777 Backend/scripts/*.sh
 
-cd backend
+cd Backend
 npm install

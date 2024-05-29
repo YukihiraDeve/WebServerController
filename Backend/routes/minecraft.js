@@ -51,10 +51,9 @@ router.post('/create', (req, res) => {
 
 router.post('/export/:serverName/:worldName?', (req, res) => {
     const { serverName, worldName = 'world' } = req.params;
-    const scriptPath = path.join(__dirname, '../scripts/exportMap.sh');
-    shell.exec(`${scriptPath} ${serverName} ${worldName}`, (code, stdout, stderr) => {
+    const outputDir = `../export/${serverName}`;
+    shell.exec(`./scripts/exportMap.sh ${serverName} ${worldName}`, (code, stdout, stderr) => {
       if (code) {
-        console.error('Error exporting Minecraft world:', stderr);
         res.status(500).send({ message: 'Failed to export the Minecraft world', error: stderr });
       } else {
         const outputDir = `/servers/${serverName}/exports`;
@@ -63,10 +62,9 @@ router.post('/export/:serverName/:worldName?', (req, res) => {
           if (err) {
             console.error('Error sending file:', err);
             res.status(500).send({ message: 'Error sending file', error: err });
-          }
+             }
         });
-      }
-    });
+    }})
   });
 
 router.get('/list', (req, res) => {

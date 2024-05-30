@@ -74,10 +74,17 @@ router.post('/export/:serverName/:worldName?', (req, res) => {
         return res.status(404).send({ message: 'Exported files not found.' });
       }
 
-      res.json({
-        objFile: `/servers/${serverName}/exports/${worldName}.obj`,
-        mtlFile: `/servers/${serverName}/exports/${worldName}.mtl`
-      });
+      shell.exec(`./scripts/mooveMap.sh ${serverName} ${worldName}`, (code, stdout, stderr) => {
+        if (code) {
+          res.status(500).send({ message: 'Failed to move the exported files', error: stderr });
+        } else {
+        res.json({
+          objFile: `/servers/${serverName}/exports/${worldName}.obj`,
+          mtlFile: `/servers/${serverName}/exports/${worldName}.mtl`
+        });
+      }
+
+    })
     }
   });
 });
@@ -107,6 +114,6 @@ router.get('/list', (req, res) => {
   });
 
   
-  router.use('/files', express.static('/servers'));
+  router.use('/servers', express.static('/servers'));
 
 module.exports = router;

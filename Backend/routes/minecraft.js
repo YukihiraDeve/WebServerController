@@ -3,9 +3,6 @@ const router = express.Router();
 const shell = require('shelljs');
 const path = require('path'); 
 
-const fs = require('fs');
-const archiver = require('archiver');
-
 let servers = ["test"];
 
 router.post('/start/:serverName', (req, res) => {
@@ -53,42 +50,25 @@ router.post('/create', (req, res) => {
   });
 });
 
-const validNameRegex = /^[a-zA-Z0-9_-]+$/;
-
 router.post('/export/:serverName/:worldName?', (req, res) => {
-  const { serverName, worldName = 'world' } = req.params;
-  
-  if (!validNameRegex.test(serverName) || !validNameRegex.test(worldName)) {
-    return res.status(400).send({ message: 'Invalid serverName or worldName provided.' });
-  }
-
-  const outputDir = `/servers/${serverName}/exports`;
-  const objFilePath = path.join(outputDir, `${worldName}.obj`);
-  const mtlFilePath = path.join(outputDir, `${worldName}.mtl`);
-
-  shell.exec(`./scripts/exportMap.sh ${serverName} ${worldName}`, (code, stdout, stderr) => {
-    if (code) {
-      res.status(500).send({ message: 'Failed to export the Minecraft world', error: stderr });
-    } else {
-      if (!fs.existsSync(objFilePath) || !fs.existsSync(mtlFilePath)) {
-        return res.status(404).send({ message: 'Exported files not found.' });
-      }
-
-      shell.exec(`./scripts/mooveMap.sh ${serverName} ${worldName}`, (code, stdout, stderr) => {
-        if (code) {
-          res.status(500).send({ message: 'Failed to move the exported files', error: stderr });
-        } else {
-        res.json({
-          objFile: `/servers/${serverName}/exports/${worldName}.obj`,
-          mtlFile: `/servers/${serverName}/exports/${worldName}.mtl`
+    const { serverName, worldName = 'world' } = req.params;
+    const outputDir = `../export/${serverName}`;
+    shell.exec(`./scripts/exportMap.sh ${serverName} ${worldName}`, (code, stdout, stderr) => {
+      if (code) {
+        res.status(500).send({ message: 'Failed to export the Minecraft world', error: stderr });
+      } else {
+        shell.exec(`./scripts/mooveMap.sh ${serverName} ${worldName}`, (code, stdout, stderr) => {
+            const outputDir = `/servers/${serverName}/exports`;
+            const filePath = path.join(outputDir, `${worldName}.obj`);
+            res.download(filePath, `${worldName}.obj`, (err) => {
+            if (err) {
+                console.error('Error sending file:', err);
+                res.status(500).send({ message: 'Error sending file', error: err });
+                }
+            });
         });
-      }
-
-    })
-    }
+    }})
   });
-});
-
 
 router.get('/list', (req, res) => {
     shell.exec('./scripts/listServer.sh', (code, stdout, stderr) => {
@@ -114,6 +94,6 @@ router.get('/list', (req, res) => {
   });
 
   
-  router.use('/servers', express.static('/servers'));
+
 
 module.exports = router;

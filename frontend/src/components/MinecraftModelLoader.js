@@ -1,62 +1,55 @@
 import React, { Suspense, useRef, useState, useEffect } from 'react';
 import { Canvas, useLoader } from '@react-three/fiber';
-import { OrbitControls, useProgress, Html } from '@react-three/drei';
+import { OrbitControls, useProgress, Html, Sky } from '@react-three/drei';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
-import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
 
 const Loader = () => {
   const { progress } = useProgress();
   return <Html center>{progress} % loaded</Html>;
 };
 
-const MinecraftModel = ({ objUrl, mtlUrl }) => {
-  // Ensure useLoader is directly within a component rendered by Canvas
-  const materials = useLoader(MTLLoader, mtlUrl);
-  const obj = useLoader(OBJLoader, objUrl, loader => {
-    loader.setMaterials(materials);
-  });
-
+const MinecraftModel = ({ url }) => {
+  const obj = useLoader(OBJLoader, url);
   const ref = useRef();
-  return <primitive object={obj} ref={ref} scale={[1, 1, 1]} />;
+
+  return (
+    <primitive object={obj} ref={ref} scale={[1, 1, 1]} />
+  );
 };
 
-const MinecraftModelLoader = ({ serverName, worldName = "world" }) => {
-  const [objUrl, setObjUrl] = useState(null);
-  const [mtlUrl, setMtlUrl] = useState(null);
-  const [loading, setLoading] = useState(true);
+const MinecraftModelLoader = ({ serverName, worldName  = "world"}) => {
+  const [url, setUrl] = useState(null);
+  const [apiKey, setApiKey] = useState('test');
 
   useEffect(() => {
     const fetchUrl = `http://172.16.173.137:3001/api/minecraft/export/${serverName}/${worldName}`;
-    
-    fetch(fetchUrl, { method: 'POST', headers: {'x-api-key': 'test' }})
-      .then(response => {
+    fetch(fetchUrl, { method: 'POST', headers: {'x-api-key': apiKey }}) 
+      .then((response) => {
         if (!response.ok) {
           console.error('Network response was not ok', response.statusText);
           throw new Error('Network response was not ok: ' + response.statusText);
         }
-        return response.json();
+        return response.blob();
       })
-      .then(({ objFile, mtlFile }) => {
-        setObjUrl(`http://172.16.173.137:3001${objFile}`);
-        setMtlUrl(`http://172.16.173.137:3001${mtlFile}`);
-        setLoading(false);
+      .then((blob) => {
+        const url = URL.createObjectURL(blob);
+        setUrl(url);
       })
-      .catch(error => {
-        console.error('Error fetching file paths:', error);
+      .catch((error) => {
+        console.error('Fetch error:', error);
+        alert('Error fetching OBJ file: ' + error.message);
       });
   }, [serverName, worldName]);
 
-  if (loading || !objUrl || !mtlUrl) {
+  if (!url) {
     return <div>Loading...</div>;
   }
 
   return (
     <Canvas>
       <Suspense fallback={<Loader />}>
-        <MinecraftModel objUrl={objUrl} mtlUrl={mtlUrl} />
+        <MinecraftModel url={url} />
         <OrbitControls />
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[0, 0, 5]} />
       </Suspense>
     </Canvas>
   );

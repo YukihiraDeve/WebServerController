@@ -59,7 +59,7 @@ router.post('/export/:serverName/:worldName?', (req, res) => {
     if (code) {
       res.status(500).send({ message: 'Failed to export the Minecraft world', error: stderr });
     } else {
-      shell.exec(`./scripts/mooveMap.sh ${serverName} ${worldName}`, (code, stdout, stderr) => {
+      shell.exec(`./scripts/moveMap.sh ${serverName} ${worldName}`, (code, stdout, stderr) => {
         const objFilePath = path.join(outputDir, `${worldName}.obj`);
         const mtlFilePath = path.join(outputDir, `${worldName}.mtl`);
 
@@ -80,16 +80,19 @@ router.get('/download/:serverName/:fileName', (req, res) => {
   const { serverName, fileName } = req.params;
   const filePath = path.join(`/servers/${serverName}/exports`, fileName);
 
-  if (fs.existsSync(filePath)) {
-    res.download(filePath, fileName, (err) => {
-      if (err) {
-        console.error('Error sending file:', err);
-        res.status(500).send({ message: 'Error sending file', error: err });
-      }
-    });
-  } else {
-    res.status(404).send({ message: 'File not found' });
-  }
+  fs.access(filePath, fs.constants.R_OK, (err) => {
+    if (err) {
+      console.error('File not found or no read access', err);
+      res.status(404).send({ message: 'File not found or no read access', error: err });
+    } else {
+      res.download(filePath, fileName, (err) => {
+        if (err) {
+          console.error('Error sending file:', err);
+          res.status(500).send({ message: 'Error sending file', error: err });
+        }
+      });
+    }
+  });
 });
 
 router.get('/list', (req, res) => {

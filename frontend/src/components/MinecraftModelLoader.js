@@ -1,7 +1,6 @@
 import React, { Suspense, useRef, useState, useEffect } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, useProgress, Html } from '@react-three/drei';
-import { MTLLoader } from 'three/examples/jsm/loaders/MTLLoader';
+import { Canvas, useLoader } from '@react-three/fiber';
+import { OrbitControls, useProgress, Html, Sky } from '@react-three/drei';
 import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 
 const Loader = () => {
@@ -9,67 +8,47 @@ const Loader = () => {
   return <Html center>{progress} % loaded</Html>;
 };
 
-const MinecraftModel = ({ objUrl, mtlUrl }) => {
-  const [object, setObject] = useState();
+const MinecraftModel = ({ url }) => {
+  const obj = useLoader(OBJLoader, url);
   const ref = useRef();
 
-  useEffect(() => {
-    const loadModel = async () => {
-      const mtlLoader = new MTLLoader();
-      const objLoader = new OBJLoader();
-
-      mtlLoader.load(mtlUrl, (materials) => {
-        materials.preload();
-        objLoader.setMaterials(materials);
-        objLoader.load(objUrl, (obj) => {
-          setObject(obj);
-        });
-      });
-    };
-
-    loadModel();
-  }, [objUrl, mtlUrl]);
-
-  return object ? <primitive object={object} ref={ref} scale={[1, 1, 1]} /> : null;
+  return (
+    <primitive object={obj} ref={ref} scale={[1, 1, 1]} />
+  );
 };
 
-const MinecraftModelLoader = ({ serverName, worldName = "world" }) => {
-  const [objUrl, setObjUrl] = useState(null);
-  const [mtlUrl, setMtlUrl] = useState(null);
+const MinecraftModelLoader = ({ serverName, worldName  = "world"}) => {
+  const [url, setUrl] = useState(null);
   const [apiKey, setApiKey] = useState('test');
 
   useEffect(() => {
-    const fetchUrls = async () => {
-      const fetchUrl = `http://172.16.173.137:3001/api/minecraft/export/${serverName}/${worldName}`;
-
-      try {
-        const response = await fetch(fetchUrl, { method: 'POST', headers: { 'x-api-key': apiKey } });
-
+    const fetchUrl = `http://172.16.173.137:3001/api/minecraft/export/${serverName}/${worldName}`;
+    fetch(fetchUrl, { method: 'POST', headers: {'x-api-key': apiKey }}) 
+      .then((response) => {
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          console.error('Network response was not ok', response.statusText);
+          throw new Error('Network response was not ok: ' + response.statusText);
         }
-
-        const data = await response.json();
-
-        setObjUrl(data.objUrl);
-        setMtlUrl(data.mtlUrl);
-      } catch (error) {
+        return response.blob();
+      })
+      .then((blob) => {
+        const url = URL.createObjectURL(blob);
+        setUrl(url);
+      })
+      .catch((error) => {
         console.error('Fetch error:', error);
-        alert('Error fetching files: ' + error.message);
-      }
-    };
-
-    fetchUrls();
+        alert('Error fetching OBJ file: ' + error.message);
+      });
   }, [serverName, worldName]);
 
-  if (!objUrl || !mtlUrl) {
+  if (!url) {
     return <div>Loading...</div>;
   }
 
   return (
     <Canvas>
       <Suspense fallback={<Loader />}>
-        <MinecraftModel objUrl={objUrl} mtlUrl={mtlUrl} />
+        <MinecraftModel url={url} />
         <OrbitControls />
       </Suspense>
     </Canvas>

@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const shell = require('shelljs');
-const path = require('path');
-const fs = require('fs');
+const path = require('path'); 
 
 let servers = ["test"];
 
@@ -52,69 +51,49 @@ router.post('/create', (req, res) => {
 });
 
 router.post('/export/:serverName/:worldName?', (req, res) => {
-  const { serverName, worldName = 'world' } = req.params;
-  const outputDir = `/servers/${serverName}/exports`;
-
-  shell.exec(`./scripts/exportMap.sh ${serverName} ${worldName}`, (code, stdout, stderr) => {
-    if (code) {
-      res.status(500).send({ message: 'Failed to export the Minecraft world', error: stderr });
-    } else {
-      shell.exec(`./scripts/mooveMap.sh ${serverName} ${worldName}`, (code, stdout, stderr) => {
-        const objFilePath = path.join(outputDir, `${worldName}.obj`);
-        const mtlFilePath = path.join(outputDir, `${worldName}.mtl`);
-
-        if (fs.existsSync(objFilePath) && fs.existsSync(mtlFilePath)) {
-          res.json({
-            objUrl: `/servers/${serverName}/${worldName}.obj`,
-            mtlUrl: `/servers/${serverName}/${worldName}.mtl`
-          });
-        } else {
-          res.status(500).send({ message: 'Exported files not found' });
-        }
-      });
-    }
+    const { serverName, worldName = 'world' } = req.params;
+    const outputDir = `../export/${serverName}`;
+    shell.exec(`./scripts/exportMap.sh ${serverName} ${worldName}`, (code, stdout, stderr) => {
+      if (code) {
+        res.status(500).send({ message: 'Failed to export the Minecraft world', error: stderr });
+      } else {
+        shell.exec(`./scripts/mooveMap.sh ${serverName} ${worldName}`, (code, stdout, stderr) => {
+            const outputDir = `/servers/${serverName}/exports`;
+            const filePath = path.join(outputDir, `${worldName}.obj`);
+            res.download(filePath, `${worldName}.obj`, (err) => {
+            if (err) {
+                console.error('Error sending file:', err);
+                res.status(500).send({ message: 'Error sending file', error: err });
+                }
+            });            
+        });
+    }})
   });
-});
-
-router.get('/download/:serverName/:fileName', (req, res) => {
-  const { serverName, fileName } = req.params;
-  const filePath = path.join(`/servers/${serverName}/exports`, fileName);
-
-  fs.access(filePath, fs.constants.R_OK, (err) => {
-    if (err) {
-      console.error('File not found or no read access', err);
-      res.status(404).send({ message: 'File not found or no read access', error: err });
-    } else {
-      res.download(filePath, fileName, (err) => {
-        if (err) {
-          console.error('Error sending file:', err);
-          res.status(500).send({ message: 'Error sending file', error: err });
-        }
-      });
-    }
-  });
-});
 
 router.get('/list', (req, res) => {
-  shell.exec('./scripts/listServer.sh', (code, stdout, stderr) => {
-    if (code) {
-      res.status(500).send({ message: 'Failed to list Minecraft servers', error: stderr });
-    } else {
-      const serverList = stdout.split('\n').filter(line => line.trim() !== '');
-      res.json(serverList);
-    }
+    shell.exec('./scripts/listServer.sh', (code, stdout, stderr) => {
+      if (code) {
+        res.status(500).send({ message: 'Failed to list Minecraft servers', error: stderr });
+      } else {
+        const serverList = stdout.split('\n').filter(line => line.trim() !== '');
+        res.json(serverList);
+      }
+    });
   });
-});
 
-router.get('/status/:serverName', (req, res) => {
-  const { serverName } = req.params;
-  shell.exec(`./scripts/checkServerStatus.sh ${serverName}`, (code, stdout, stderr) => {
-    if (code) {
-      res.send({ status: 'off', message: stdout });
-    } else {
-      res.send({ status: 'on', message: stdout });
-    }
+
+  router.get('/status/:serverName', (req, res) => {
+    const { serverName } = req.params;
+    shell.exec(`./scripts/checkServerStatus.sh ${serverName}`, (code, stdout, stderr) => {
+      if (code) {
+        res.send({ status: 'off', message: stdout });
+      } else {
+        res.send({ status: 'on', message: stdout });
+      }
+    });
   });
-});
+
+  
+
 
 module.exports = router;

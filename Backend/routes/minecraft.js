@@ -65,8 +65,8 @@ router.post('/export/:serverName/:worldName?', (req, res) => {
 
         if (fs.existsSync(objFilePath) && fs.existsSync(mtlFilePath)) {
           res.json({
-            objUrl: `/download/${serverName}/${worldName}.obj`,
-            mtlUrl: `/download/${serverName}/${worldName}.mtl`
+            objUrl: `/servers/${serverName}/${worldName}.obj`,
+            mtlUrl: `/servers/${serverName}/${worldName}.mtl`
           });
         } else {
           res.status(500).send({ message: 'Exported files not found' });

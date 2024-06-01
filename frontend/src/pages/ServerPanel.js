@@ -29,7 +29,9 @@ const ServerPanel = () => {
         <div className="col-span-3">
             <MinecraftControl serverName={serverName} />
         </div>
-        <MinecraftModelLoader serverName={serverName} />
+        <div className="col-span-9 bg-indigo-500">
+          <MinecraftModelLoader serverName={serverName}/>
+        </div>
     </div>
 
     </div>

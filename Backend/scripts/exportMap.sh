@@ -20,7 +20,7 @@ mkdir -p $outputDir
 # Ex  cuter la commande jMc2Obj
 java -jar $jmc2objPath $worldPath
 
-sleep 5
+sleep 10
 
 # V  rifier si la commande a r  ussi
 if [ $? -eq 0 ]; then

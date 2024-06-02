@@ -22,10 +22,14 @@ fi
 cd "$MINECRAFT_DIR" || exit 1
 if [ ! -f "server.jar" ]; then
   echo "[INFO] Downloading Minecraft server jar..."
-  echo "[INFO] Downloading Minecraft jar..."
   wget -O server.jar "$SERVER_JAR_URL"
+fi
+
+if [ ! -f "mi,ecraft.jar" ]; then
+  echo "[INFO] Downloading Minecraft jar..."
   wget -O minecraft.jar "$minecraftJar"
 fi
+
 
 echo "eula=true" > "$EULA_FILE"
 

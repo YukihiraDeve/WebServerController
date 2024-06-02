@@ -5,7 +5,7 @@ const ServerStatus = ({ serverName }) => {
   const [stats, setStats] = useState({ memory: {}, cpu: [], storage: '' });
 
   const fetchStats = () => {
-    fetch(`http://172.16.173.137:3001/api/system-stats/stats/${serverName}`, {
+    fetch(`http://90.79.8.144:3001/api/system-stats/stats/${serverName}`, {
       headers: { 'x-api-key': 'test' }
     })
       .then(response => response.json())

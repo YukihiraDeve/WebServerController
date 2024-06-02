@@ -10,7 +10,7 @@ fi
 SERVER_NAME="$1"
 MINECRAFT_DIR="/servers/$SERVER_NAME"  # Modifie le chemin ici
 SERVER_JAR_URL="https://piston-data.mojang.com/v1/objects/145ff0858209bcfc164859ba735d4199aafa1eea/server.jar"  
-minecraftJar="https://mcversions.net/download/1.20.6"
+MINECRAFT_JAR="https://piston-data.mojang.com/v1/objects/05b6f1c6b46a29d6ea82b4e0d42190e42402030f/client.jar"
 EULA_FILE="$MINECRAFT_DIR/eula.txt"
 
 # Créer le répertoire du serveur s'il n'existe pas
@@ -25,9 +25,9 @@ if [ ! -f "server.jar" ]; then
   wget -O server.jar "$SERVER_JAR_URL"
 fi
 
-if [ ! -f "mi,ecraft.jar" ]; then
+if [ ! -f "minecraft.jar" ]; then
   echo "[INFO] Downloading Minecraft jar..."
-  wget -O minecraft.jar "$minecraftJar"
+  wget -O minecraft.jar "$MINECRAFT_JAR"
 fi
 
 

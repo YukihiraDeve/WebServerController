@@ -16,6 +16,12 @@ outputFile="$outputDir/$worldName.obj"
 
 VENV_DIR="$scriptDir/../env"
 
+# Vérifiez que le répertoire de l'environnement virtuel existe
+if [ ! -d "$VENV_DIR" ]; then
+  echo "[ERROR] Environment virtual directory does not exist."
+  exit 1
+fi
+
 source "$VENV_DIR/bin/activate"
 
 getSpawnCoordsScript="$scriptDir/../export/SpawnCoordinate.py"
@@ -26,6 +32,7 @@ spawnCoords=$(python3 "$getSpawnCoordsScript" "$worldPath/playerdata")
 
 if [ -z "$spawnCoords" ]; then
   echo "[ERROR] Unable to retrieve player spawn coordinates."
+  deactivate  # Désactiver l'environnement virtuel
   exit 1
 fi
 

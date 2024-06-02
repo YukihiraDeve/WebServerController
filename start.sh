@@ -2,9 +2,9 @@
 
 REQUIRED_JAVA_VERSION="18"
 REQUIRED_NODE_VERSION="16"
-REQUIRED_PYTHON_VERSION="3.8" # ou la version que vous souhaitez
+REQUIRED_PYTHON_VERSION="3.8"
 REQUIRED_PYTHON_LIB="nbtlib"
-VENV_DIR="env"
+VENV_DIR="$(dirname "$(readlink -f "$0")")/env"
 
 check_java_version() {
     local java_version
@@ -37,7 +37,7 @@ check_python_version() {
 }
 
 check_python_lib() {
-    if python3 -c "import $REQUIRED_PYTHON_LIB" &> /dev/null; then
+    if "$VENV_DIR/bin/python3" -c "import $REQUIRED_PYTHON_LIB" &> /dev/null; then
         return 0
     else
         return 1
@@ -91,7 +91,7 @@ if type -p node; then
     fi
 else
     echo "Node.js n'est pas installé. Installation de la version $REQUIRED_NODE_VERSION en cours..."
-        INSTALL_NODE=true
+    INSTALL_NODE=true
 fi
 
 if [ "$INSTALL_NODE" = true ]; then

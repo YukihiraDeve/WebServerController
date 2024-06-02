@@ -9,7 +9,8 @@ fi
 # Variables
 SERVER_NAME="$1"
 MINECRAFT_DIR="/servers/$SERVER_NAME"  # Modifie le chemin ici
-SERVER_JAR_URL="https://piston-data.mojang.com/v1/objects/145ff0858209bcfc164859ba735d4199aafa1eea/server.jar"  # Modifie ici avec le bon lien du jar
+SERVER_JAR_URL="https://piston-data.mojang.com/v1/objects/145ff0858209bcfc164859ba735d4199aafa1eea/server.jar"  
+minecraftJar="https://mcversions.net/download/1.20.6"
 EULA_FILE="$MINECRAFT_DIR/eula.txt"
 
 # Créer le répertoire du serveur s'il n'existe pas
@@ -21,13 +22,13 @@ fi
 cd "$MINECRAFT_DIR" || exit 1
 if [ ! -f "server.jar" ]; then
   echo "[INFO] Downloading Minecraft server jar..."
+  echo "[INFO] Downloading Minecraft jar..."
   wget -O server.jar "$SERVER_JAR_URL"
+  wget -O minecraft.jar "$minecraftJar"
 fi
 
-# Accepter l'EULA
 echo "eula=true" > "$EULA_FILE"
 
-# Créer un fichier de configuration server.properties par défaut
 cat <<EOL > server.properties
 # Minecraft server properties
 # (example properties)

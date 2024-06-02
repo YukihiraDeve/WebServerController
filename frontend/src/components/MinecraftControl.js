@@ -14,7 +14,7 @@ const MinecraftControl = ({ serverName }) => {
 
   const checkServerStatus = () => {
     setLoading(true);
-    axios.get(`http://172.16.173.137:3001/api/minecraft/status/${serverName}`, {
+    axios.get(`http://90.79.8.144:3001/api/minecraft/status/${serverName}`, {
       headers: { 'x-api-key': apiKey }
     })
     .then(response => {
@@ -31,7 +31,7 @@ const MinecraftControl = ({ serverName }) => {
 
   const startServer = () => {
     setLoading(true);
-    axios.post(`http://172.16.173.137:3001/api/minecraft/start/${serverName}`, {}, {
+    axios.post(`http://90.79.8.144:3001/api/minecraft/start/${serverName}`, {}, {
       headers: { 'x-api-key': apiKey }
     })
     .then(response => {
@@ -49,7 +49,7 @@ const MinecraftControl = ({ serverName }) => {
 
   const restartServer = () => {
     setLoading(true);
-    axios.post(`http://172.16.173.137:3001/api/minecraft/restart/${serverName}`, {}, {
+    axios.post(`http://90.79.8.144:3001/api/minecraft/restart/${serverName}`, {}, {
       headers: { 'x-api-key': apiKey }
     })
     .then(response => {
@@ -67,7 +67,7 @@ const MinecraftControl = ({ serverName }) => {
 
   const stopServer = () => {
     setLoading(true);
-    axios.post(`http://172.16.173.137:3001/api/minecraft/shutdown/${serverName}`, {}, {
+    axios.post(`http://90.79.8.144:3001/api/minecraft/shutdown/${serverName}`, {}, {
       headers: { 'x-api-key': apiKey }
     })
     .then(response => {

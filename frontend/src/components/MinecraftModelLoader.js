@@ -35,7 +35,7 @@ const MinecraftModelLoader = ({ serverName, worldName = "world" }) => {
   const [apiKey, setApiKey] = useState('test');
 
   useEffect(() => {
-    const fetchUrl = `http://172.16.173.137:3001/api/minecraft/export/${serverName}/${worldName}`;
+    const fetchUrl = `http://90.79.8.144:3001/api/minecraft/export/${serverName}/${worldName}`;
     fetch(fetchUrl, { method: 'POST', headers: { 'x-api-key': apiKey } })
       .then((response) => {
         if (!response.ok) {

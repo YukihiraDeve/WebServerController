@@ -44,7 +44,7 @@ const ServerStatus = ({ serverName }) => {
   const storageFreePercent = extractStorageFreePercentage(stats.storage);
 
   return (
-    <div className="drop-shadow-xl grid gap-6 md:grid-cols-3 p-4 md:p-8 max-w-5xl mx-auto w-full">
+    <div className="drop-shadow-xl grid gap-5 md:grid-cols-4 p-4 md:p-4 max-w-5xl mx-auto w-full ">
       {/* Memory Stats */}
       <div className="p-6 bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col justify-center h-48 overflow-hidden">
         <dl className="space-y-2">
@@ -67,6 +67,13 @@ const ServerStatus = ({ serverName }) => {
         <dl className="space-y-2">
           <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Storage Free</dt>
           <dd className="text-5xl font-light md:text-6xl dark:text-white">{storageFreePercent}%</dd>
+        </dl>
+      </div>
+            {/* Storage Stats */}
+        <div className="drop-shadow-xl p-6 bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col justify-center h-48 overflow-hidden">
+          <dl className="space-y-2">
+          <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Player</dt>
+          <dd className="text-5xl font-light md:text-6xl dark:text-white">{storageFreePercent}/20</dd>
         </dl>
       </div>
     </div>

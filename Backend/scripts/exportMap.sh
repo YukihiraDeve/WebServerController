@@ -10,19 +10,18 @@ serverName=$1
 worldName=$2
 scriptDir=$(dirname "$(readlink -f "$0")")
 jmc2objPath="$scriptDir/../export/jMc2Obj-124.jar"
+MinecraftJarPath="/servers/$serverName/minecraft.jar"
 worldPath="/servers/$serverName/$worldName"
 outputDir="/servers/$serverName/exports"
 outputFile="$outputDir/$worldName.obj"
 
-# Cr  er le r  pertoire de sortie s'il n'existe pas
 mkdir -p $outputDir
 
-# Ex  cuter la commande jMc2Obj
-java -jar $jmc2objPath $worldPath
+java -jar $jmc2objPath --resource-pack=$MinecraftJarPath $worldPath
 
 sleep 10
 
-# V  rifier si la commande a r  ussi
+
 if [ $? -eq 0 ]; then
     echo "[INFO Model] Exportation réussie : $outputFile"
     exit 0

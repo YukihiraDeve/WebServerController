@@ -70,6 +70,20 @@ router.post('/export/:serverName/:worldName?', (req, res) => {
     }})
   });
 
+
+
+  router.post('/exportMTL/:serverName/:worldName?', (req, res) => {
+    const { serverName, worldName = 'world' } = req.params;
+    const outputDir = `/servers/${serverName}/exports`;
+    const filePath = path.join(outputDir, `${worldName}.mtl`);
+    res.download(filePath, `${worldName}.mtl`, (err) => {
+      if (err) {
+          console.error('Error sending file:', err);
+          res.status(500).send({ message: 'Error sending file', error: err });
+          }
+      });            
+  });
+
 router.get('/list', (req, res) => {
     shell.exec('./scripts/listServer.sh', (code, stdout, stderr) => {
       if (code) {

@@ -32,6 +32,7 @@ const MinecraftModel = ({ objUrl, mtlUrl }) => {
 
 const MinecraftModelLoader = ({ serverName, worldName = "world" }) => {
   const [objUrl, setObjUrl] = useState(null);
+  const [mtlUrl, setMtlUrl] = useState(null);
   const [apiKey, setApiKey] = useState('test');
 
   useEffect(() => {
@@ -52,9 +53,27 @@ const MinecraftModelLoader = ({ serverName, worldName = "world" }) => {
         console.error('Fetch error:', error);
         alert('Error fetching OBJ file: ' + error.message);
       });
+      const fetchMTL = `http://90.79.8.144:3001/api/minecraft/exportMTL/${serverName}/${worldName}`;
+      fetch(fetchMTL, { method: 'POST', headers: { 'x-api-key': apiKey } })
+        .then((response) => {
+          if (!response.ok) {
+            console.error('Network response was not ok', response.statusText);
+            throw new Error('Network response was not ok: ' + response.statusText);
+          }
+          return response.blob();
+        })
+        .then((blob) => {
+          const url = URL.createObjectURL(blob);
+          setMtlUrl(url);
+        })
+        .catch((error) => {
+          console.error('Fetch error:', error);
+          alert('Error fetching OBJ file: ' + error.message);
+        });
+
+
   }, [serverName, worldName]);
 
-  const mtlUrl = '/assets/world.mtl'; // Path from the public root
 
   if (!objUrl) {
     return <div>Loading...</div>;

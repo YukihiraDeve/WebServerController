@@ -11,21 +11,32 @@ const Loader = () => {
   return <Html center>{progress} % loaded</Html>;
 };
 
-const MinecraftModel = ({ objUrl, mtlUrl }) => {
+const MinecraftModel = ({ objUrl, mtlUrl, texturePath }) => {
   const [object, setObject] = useState(null);
   const ref = useRef();
 
+  
+
   useEffect(() => {
     const mtlLoader = new MTLLoader();
+    mtlLoader.setResourcePath(texturePath);
     mtlLoader.load(mtlUrl, (materials) => {
       materials.preload();
       const objLoader = new OBJLoader();
       objLoader.setMaterials(materials);
       objLoader.load(objUrl, (obj) => {
         setObject(obj);
+      }, 
+      undefined, 
+      (error) => {
+        console.error('Error loading OBJ:', error);
       });
+    }, 
+    undefined, 
+    (error) => {
+      console.error('Error loading MTL:', error);
     });
-  }, [objUrl, mtlUrl]);
+  }, [objUrl, mtlUrl, texturePath]);
 
   return object ? <primitive object={object} ref={ref} scale={[1, 1, 1]} /> : null;
 };
@@ -34,6 +45,8 @@ const MinecraftModelLoader = ({ serverName, worldName = "world" }) => {
   const [objUrl, setObjUrl] = useState(null);
   const [mtlUrl, setMtlUrl] = useState(null);
   const [apiKey, setApiKey] = useState('test');
+
+  const textureBaseURL = 'http://localhost:3000/';
 
   useEffect(() => {
     const fetchUrl = `http://90.79.8.144:3001/api/minecraft/export/${serverName}/${worldName}`;
@@ -51,7 +64,6 @@ const MinecraftModelLoader = ({ serverName, worldName = "world" }) => {
       })
       .catch((error) => {
         console.error('Fetch error:', error);
-        alert('Error fetching OBJ file: ' + error.message);
       });
       const fetchMTL = `http://90.79.8.144:3001/api/minecraft/exportMTL/${serverName}/${worldName}`;
       fetch(fetchMTL, { method: 'POST', headers: { 'x-api-key': apiKey } })
@@ -68,7 +80,6 @@ const MinecraftModelLoader = ({ serverName, worldName = "world" }) => {
         })
         .catch((error) => {
           console.error('Fetch error:', error);
-          alert('Error fetching OBJ file: ' + error.message);
         });
 
 
@@ -82,8 +93,8 @@ const MinecraftModelLoader = ({ serverName, worldName = "world" }) => {
   return (
     <Canvas>
       <Suspense fallback={<Loader />}>
-        <ambientLight intensity={1} />
-        <MinecraftModel objUrl={objUrl} mtlUrl={mtlUrl} />
+        <ambientLight intensity={5} />
+        <MinecraftModel objUrl={objUrl} mtlUrl={mtlUrl} texturePath={textureBaseURL} />
         <OrbitControls />
       </Suspense>
     </Canvas>

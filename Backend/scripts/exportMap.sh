@@ -14,15 +14,35 @@ worldPath="/servers/$serverName/$worldName"
 outputDir="/servers/$serverName/exports"
 outputFile="$outputDir/$worldName.obj"
 
-mkdir -p $outputDir
+VENV_DIR="$scriptDir/../export/env"
 
-java -jar $jmc2objPath --resource-pack=$MinecraftJarPath $worldPath
+source "$VENV_DIR/bin/activate"
+
+
+getSpawnCoordsScript="$scriptDir/../export/SpawnCoordinate.py"
+
+mkdir -p "$outputDir"
+
+spawnCoords=$(python3 "$getSpawnCoordsScript" "$worldPath/playerdata")
+
+
+if [ -z "$spawnCoords" ]; then
+  echo "[ERROR] Unable to retrieve player spawn coordinates."
+  exit 1
+fi
+
+# Parse the spawn coordinates
+read spawnX spawnY spawnZ <<< "$spawnCoords"
+
+echo "Spawn Coordinates: x=$spawnX, y=$spawnY, z=$spawnZ"
+
+
+java -jar "$jmc2objPath" --resource-pack="$MinecraftJarPath" "$worldPath" -o "$outputFile" --area="$spawnX,$spawnY,$spawnZ,$((spawnX+512)),$((spawnZ+512))"
 
 sleep 10
 
-
 if [ $? -eq 0 ]; then
-    echo "[INFO Model] Exportation reussie : $outputFile"
+    echo "[INFO Model] Exportation réussie : $outputFile"
     exit 0
 else
   echo "[ERROR Model] Erreur lors dans le modeling" >&2

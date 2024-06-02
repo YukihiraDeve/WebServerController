@@ -2,8 +2,9 @@
 
 REQUIRED_JAVA_VERSION="18"
 REQUIRED_NODE_VERSION="16"
-REQUIRED_PYTHON_VERSION="3.8" 
+REQUIRED_PYTHON_VERSION="3.8" # ou la version que vous souhaitez
 REQUIRED_PYTHON_LIB="nbtlib"
+VENV_DIR="env"
 
 check_java_version() {
     local java_version
@@ -80,7 +81,6 @@ if [ "$INSTALL_JAVA" = true ]; then
     fi
 fi
 
-# Vérification de Node.js
 if type -p node; then
     echo "Node.js est installé."
     if check_node_version; then
@@ -91,7 +91,7 @@ if type -p node; then
     fi
 else
     echo "Node.js n'est pas installé. Installation de la version $REQUIRED_NODE_VERSION en cours..."
-    INSTALL_NODE=true
+        INSTALL_NODE=true
 fi
 
 if [ "$INSTALL_NODE" = true ]; then
@@ -119,7 +119,7 @@ if [ "$INSTALL_NODE" = true ]; then
     fi
 fi
 
-# Vérification de Python
+# Vérification de Python et de pip
 if type -p python3; then
     echo "Python est installé."
     if check_python_version; then
@@ -142,29 +142,33 @@ if [ "$INSTALL_PYTHON" = true ]; then
     elif [ -f /etc/debian_version ]; then
         # Debian/Ubuntu
         sudo apt update
-        sudo apt install -y python3
+        sudo apt install -y python3 python3-pip
     elif [ -f /etc/redhat-release ]; then
         # RHEL/CentOS
-        sudo yum install -y python3
+        sudo yum install -y python3 python3-pip
     elif [ -f /etc/arch-release ]; then
         # Arch Linux
-        sudo pacman -S --noconfirm python
+        sudo pacman -S --noconfirm python python-pip
     else
         echo "Système d'exploitation non supporté pour l'installation automatique de Python."
         exit 1
     fi
 fi
 
-# Vérification de la librairie nbtlib
+if [ ! -d "$VENV_DIR" ]; then
+    python3 -m venv $VENV_DIR
+fi
+source $VENV_DIR/bin/activate
+
 if check_python_lib; then
     echo "La librairie $REQUIRED_PYTHON_LIB est déjà installée."
 else
     echo "La librairie $REQUIRED_PYTHON_LIB n'est pas installée. Installation en cours..."
-    pip3 install $REQUIRED_PYTHON_LIB
+    pip install $REQUIRED_PYTHON_LIB
 fi
 
 echo "API_SECRET_KEY=test" > Backend/.env
-mkdir /servers/
+mkdir -p /servers/
 chmod -R 777 Backend/scripts/*.sh
 
 cd Backend

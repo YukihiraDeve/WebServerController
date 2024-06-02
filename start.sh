@@ -2,6 +2,8 @@
 
 REQUIRED_JAVA_VERSION="18"
 REQUIRED_NODE_VERSION="16"
+REQUIRED_PYTHON_VERSION="3.8" 
+REQUIRED_PYTHON_LIB="nbtlib"
 
 check_java_version() {
     local java_version
@@ -23,6 +25,25 @@ check_node_version() {
     fi
 }
 
+check_python_version() {
+    local python_version
+    python_version=$(python3 -V 2>&1 | awk '{print $2}')
+    if [[ "$python_version" == "$REQUIRED_PYTHON_VERSION"* ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+check_python_lib() {
+    if python3 -c "import $REQUIRED_PYTHON_LIB" &> /dev/null; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Vérification de Java
 if type -p java; then
     echo "Java est installé."
     if check_java_version; then
@@ -59,7 +80,7 @@ if [ "$INSTALL_JAVA" = true ]; then
     fi
 fi
 
-
+# Vérification de Node.js
 if type -p node; then
     echo "Node.js est installé."
     if check_node_version; then
@@ -98,6 +119,49 @@ if [ "$INSTALL_NODE" = true ]; then
     fi
 fi
 
+# Vérification de Python
+if type -p python3; then
+    echo "Python est installé."
+    if check_python_version; then
+        echo "Python version $REQUIRED_PYTHON_VERSION est déjà installée."
+    else
+        echo "La version de Python installée n'est pas la version $REQUIRED_PYTHON_VERSION. Installation de la version $REQUIRED_PYTHON_VERSION en cours..."
+        INSTALL_PYTHON=true
+    fi
+else
+    echo "Python n'est pas installé. Installation de la version $REQUIRED_PYTHON_VERSION en cours..."
+    INSTALL_PYTHON=true
+fi
+
+if [ "$INSTALL_PYTHON" = true ]; then
+    if [ "$(uname)" == "Darwin" ]; then
+        # MacOS
+        brew install python@$REQUIRED_PYTHON_VERSION
+        echo 'export PATH="/usr/local/opt/python@$REQUIRED_PYTHON_VERSION/bin:$PATH"' >> ~/.zshrc
+        source ~/.zshrc
+    elif [ -f /etc/debian_version ]; then
+        # Debian/Ubuntu
+        sudo apt update
+        sudo apt install -y python3
+    elif [ -f /etc/redhat-release ]; then
+        # RHEL/CentOS
+        sudo yum install -y python3
+    elif [ -f /etc/arch-release ]; then
+        # Arch Linux
+        sudo pacman -S --noconfirm python
+    else
+        echo "Système d'exploitation non supporté pour l'installation automatique de Python."
+        exit 1
+    fi
+fi
+
+# Vérification de la librairie nbtlib
+if check_python_lib; then
+    echo "La librairie $REQUIRED_PYTHON_LIB est déjà installée."
+else
+    echo "La librairie $REQUIRED_PYTHON_LIB n'est pas installée. Installation en cours..."
+    pip3 install $REQUIRED_PYTHON_LIB
+fi
 
 echo "API_SECRET_KEY=test" > Backend/.env
 mkdir /servers/

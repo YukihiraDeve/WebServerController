@@ -4,7 +4,7 @@ REQUIRED_JAVA_VERSION="18"
 REQUIRED_NODE_VERSION="16"
 REQUIRED_PYTHON_VERSION="3.8"
 REQUIRED_PYTHON_LIB="nbtlib"
-VENV_DIR="$(dirname "$(readlink -f "$0")")/env"
+VENV_DIR="Backend/env"
 
 check_java_version() {
     local java_version
@@ -91,7 +91,7 @@ if type -p node; then
     fi
 else
     echo "Node.js n'est pas installé. Installation de la version $REQUIRED_NODE_VERSION en cours..."
-    INSTALL_NODE=true
+        INSTALL_NODE=true
 fi
 
 if [ "$INSTALL_NODE" = true ]; then

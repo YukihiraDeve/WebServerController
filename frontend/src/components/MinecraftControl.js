@@ -84,31 +84,12 @@ const MinecraftControl = ({ serverName }) => {
   };
 
   return (
-    <div className="drop-shadow-xl relative p-6 bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col space-y-4 mr-10 mt-10">
-      <div className="absolute inset-0 bg-white dark:bg-gray-900 opacity-50 rounded-2xl"></div>
-      {serverStatus === 'off' ? (
-        <button
-          onClick={startServer}
-          className="relative text-white font-bold py-2 px-4 rounded transition-all duration-700 ease-in-out bg-[length:200%_200%] bg-gradient-to-r from-blue-400 to-blue-200 hover:from-blue-500 hover:to-green-400"
-          disabled={loading}
-        >
-          {loading ? (
-            <div className="flex items-center justify-center">
-              <svg className="animate-spin h-5 w-5 mr-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291l1.42-1.42A5.962 5.962 0 016 12H2c0 2.28.965 4.373 2.54 5.76L6 17.29z"></path>
-              </svg>
-              Loading...
-            </div>
-          ) : (
-            'Start Server'
-          )}
-        </button>
-      ) : (
-        <>
+    <div className="drop-shadow-xl p-6 bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col justify-between h-48 overflow-hidden">
+      <div className="flex flex-col justify-center items-center space-y-4 h-full">
+        {serverStatus === 'off' ? (
           <button
-            onClick={restartServer}
-            className="relative text-white font-bold py-2 px-4 rounded transition-all duration-700 ease-in-out bg-[length:200%_200%] bg-gradient-to-r from-green-500 to-teal-500 hover:from-teal-500 hover:to-green-500"
+            onClick={startServer}
+            className="relative w-full text-white font-bold py-4 px-6 rounded transition-all duration-700 ease-in-out bg-[length:200%_200%] bg-gradient-to-r from-blue-400 to-blue-200 hover:from-blue-500 hover:to-green-400"
             disabled={loading}
           >
             {loading ? (
@@ -120,19 +101,38 @@ const MinecraftControl = ({ serverName }) => {
                 Loading...
               </div>
             ) : (
-              'Restart Server'
+              'Start Server'
             )}
           </button>
-          <button
-            onClick={stopServer}
-            className="relative text-white font-bold py-2 px-4 rounded transition-all duration-700 ease-in-out bg-[length:200%_200%] bg-gradient-to-r from-red-500 to-pink-500 hover:from-pink-500 hover:to-red-500"
-            disabled={loading}
-          >
-            {loading ? (
-              <div className="flex items-center justify-center">
-                <svg className="animate-spin h-5 w-5 mr-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291l1.42-1.42A5.962 5.962 0 016 12H2c0 2.28.965 4.373 2.54 5.76L6 17.29z"></path>
+        ) : (
+          <>
+            <button
+              onClick={restartServer}
+              className="relative w-full text-white font-bold py-4 px-6 rounded transition-all duration-700 ease-in-out bg-[length:200%_200%] bg-gradient-to-r from-green-500 to-teal-500 hover:from-teal-500 hover:to-green-500"
+              disabled={loading}
+            >
+              {loading ? (
+                <div className="flex items-center justify-center">
+                  <svg className="animate-spin h-5 w-5 mr-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291l1.42-1.42A5.962 5.962 0 016 12H2c0 2.28.965 4.373 2.54 5.76L6 17.29z"></path>
+                  </svg>
+                  Loading...
+                </div>
+              ) : (
+                'Restart Server'
+              )}
+            </button>
+            <button
+              onClick={stopServer}
+              className="relative w-full text-white font-bold py-4 px-6 rounded transition-all duration-700 ease-in-out bg-[length:200%_200%] bg-gradient-to-r from-red-500 to-pink-500 hover:from-pink-500 hover:to-red-500"
+              disabled={loading}
+            >
+              {loading ? (
+                <div className="flex items-center justify-center">
+                  <svg className="animate-spin h-5 w-5 mr-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291l1.42-1.42A5.962 5.962 0 016 12H2c0 2.28.965 4.373 2.54 5.76L6 17.29z"></path>
                 </svg>
                 Loading...
               </div>
@@ -140,8 +140,9 @@ const MinecraftControl = ({ serverName }) => {
               'Stop Server'
             )}
           </button>
-        </>
-      )}
+          </>
+        )}
+      </div>
     </div>
   );
 };

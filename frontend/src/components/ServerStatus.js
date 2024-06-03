@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-
-const ServerStatus = ({ serverName }) => {
+const ServerStatus = ({ serverName, section }) => {
   const [stats, setStats] = useState({ memory: {}, cpu: [], storage: '' });
 
   const fetchStats = () => {
@@ -43,39 +42,43 @@ const ServerStatus = ({ serverName }) => {
 
   const storageFreePercent = extractStorageFreePercentage(stats.storage);
 
+  const renderSection = () => {
+    switch(section) {
+      case 'memory':
+        return (
+          <div className="p-6 bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col justify-center h-48 overflow-hidden">
+            <dl className="space-y-2">
+              <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Memory Usage</dt>
+              <dd className="text-5xl font-light md:text-6xl dark:text-white">{usedMemoryPercent}%</dd>
+            </dl>
+          </div>
+        );
+      case 'cpu':
+        return (
+          <div className="drop-shadow-xl p-6 bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col justify-center h-48 overflow-hidden">
+            <dl className="space-y-2">
+              <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">CPU Usage</dt>
+              <dd className="text-5xl font-light md:text-6xl dark:text-white">{(stats.cpu.reduce((total, cpu) => total + cpu.usage, 0) * stats.cpu.length || 0).toFixed(2)}%</dd>
+            </dl>
+          </div>
+        );
+      case 'storage':
+        return (
+          <div className="drop-shadow-xl p-6 bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col justify-center h-48 overflow-hidden">
+            <dl className="space-y-2">
+              <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Storage Free</dt>
+              <dd className="text-5xl font-light md:text-6xl dark:text-white">{storageFreePercent}%</dd>
+            </dl>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
-    <div className="drop-shadow-xl grid gap-5 md:grid-cols-4 p-4 md:p-4 max-w-5xl mx-auto w-full ">
-      {/* Memory Stats */}
-      <div className="p-6 bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col justify-center h-48 overflow-hidden">
-        <dl className="space-y-2">
-          <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Memory Usage</dt>
-          <dd className="text-5xl font-light md:text-6xl dark:text-white">{usedMemoryPercent}%</dd>
-          <dd className="flex items-center space-x-1 text-sm font-medium text-green-500 dark:text-green-400"></dd>
-        </dl>
-      </div>
-
-      {/* CPU Stats */}
-      <div className="drop-shadow-xl p-6 bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col justify-center h-48 overflow-hidden">
-        <dl className="space-y-2">
-          <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">CPU Usage</dt>
-          <dd className="text-5xl font-light md:text-6xl dark:text-white">{(stats.cpu.reduce((total, cpu) => total + cpu.usage, 0) * stats.cpu.length || 0).toFixed(2)}%</dd>
-        </dl>
-      </div>
-
-      {/* Storage Stats */}
-      <div className="drop-shadow-xl p-6 bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col justify-center h-48 overflow-hidden">
-        <dl className="space-y-2">
-          <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Storage Free</dt>
-          <dd className="text-5xl font-light md:text-6xl dark:text-white">{storageFreePercent}%</dd>
-        </dl>
-      </div>
-            {/* Storage Stats */}
-        <div className="drop-shadow-xl p-6 bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col justify-center h-48 overflow-hidden">
-          <dl className="space-y-2">
-          <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Player</dt>
-          <dd className="text-5xl font-light md:text-6xl dark:text-white">{storageFreePercent}/20</dd>
-        </dl>
-      </div>
+    <div>
+      {renderSection()}
     </div>
   );
 };

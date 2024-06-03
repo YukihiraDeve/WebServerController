@@ -41,11 +41,15 @@ fi
 # Parse the spawn coordinates
 read spawnX spawnY spawnZ <<< "$spawnCoords"
 
+
 echo "Spawn Coordinates: x=$spawnX, y=$spawnY, z=$spawnZ"
 
-java -jar "$jmc2objPath" --resource-pack="$MinecraftJarPath" "$worldPath" --offset=center --area="$spawnX,$spawnZ,$((spawnX+30)),$((spawnZ+30))"
+minSpawnX=$((spawnX - 30))
+minSpawnZ=$((spawnZ - 30))
 
-sleep 10
+
+java -jar "$jmc2objPath" --resource-pack="$MinecraftJarPath" "$worldPath" --area="$minSpawnX,$minSpawnZ,$((spawnX+60)),$((spawnZ+60))" --offset=center
+sleep 3
 
 if [ $? -eq 0 ]; then
     echo "[INFO Model] Exportation réussie : $outputFile"

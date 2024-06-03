@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import MinecraftControl from '../components/MinecraftControl';
 import ServerStatus from '../components/ServerStatus';
 import MinecraftModelLoader from '../components/MinecraftModelLoader';
+import ServerPropertiesEditor from '../components/ServerPropertiesEditor';
 
 const ServerPanel = () => {
   const { serverName } = useParams();
@@ -47,7 +48,9 @@ const ServerPanel = () => {
         <div className="col-start-5 row-start-1">
           <MinecraftControl serverName={serverName} />
         </div>
-        <div className="col-span-2 row-span-2 col-start-4">8</div>
+        <div className="col-span-2 row-span-2 col-start-4">
+          <ServerPropertiesEditor serverName={serverName} />
+        </div>
 
       </div>
     </div>

@@ -116,4 +116,22 @@ router.get('/players/:serverName', async (req, res) => {
   }
 });
 
+
+
+//Server properties
+
+router.post('/editServerProperties/:serverName', (req, res) => {
+  const { serverName } = req.params;
+  const { key, value } = req.body;
+
+  shell.exec(`./scripts/editServerProperties.sh ${serverName} ${key} ${value}`, (code, stdout, stderr) => {
+    if (code) {
+      res.status(500).send({ message: 'Failed to edit server properties', error: stderr });
+    } else {
+      res.send({ message: 'Server properties updated successfully', output: stdout });
+    }
+  });
+});
+
+
 module.exports = router;

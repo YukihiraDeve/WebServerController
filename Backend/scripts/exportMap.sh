@@ -46,9 +46,11 @@ echo "Spawn Coordinates: x=$spawnX, y=$spawnY, z=$spawnZ"
 
 minSpawnX=$((spawnX - 30))
 minSpawnZ=$((spawnZ - 30))
+maxY=120
+min=0
 
 
-java -jar "$jmc2objPath" --resource-pack="$MinecraftJarPath" "$worldPath" --area="$minSpawnX,$minSpawnZ,$((spawnX+60)),$((spawnZ+60))" --offset=center
+java -jar "$jmc2objPath" --resource-pack="$MinecraftJarPath" "$worldPath" --area="$minSpawnX,$minSpawnZ,$((spawnX+60)),$((spawnZ+60))" --offset=center --height="$min,$maxY"
 sleep 3
 
 if [ $? -eq 0 ]; then

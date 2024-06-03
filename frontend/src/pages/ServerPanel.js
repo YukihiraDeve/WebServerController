@@ -35,6 +35,9 @@ const ServerPanel = () => {
         <div className="">
           <ServerStatus serverName={serverName} section="storage" />
         </div>
+        <div className="">
+          <ServerStatus serverName={serverName} section="players" />
+        </div>
         {/* Position 4 */}
         <div className="col-span-3 row-span-3 col-start-1 row-start-2 p-2 drop-shadow-xl bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col justify-center overflow-hidden mx-auto w-full">
           <MinecraftModelLoader serverName={serverName} />

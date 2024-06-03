@@ -24,6 +24,8 @@ fi
 
 source "$VENV_DIR/bin/activate"
 
+
+
 getSpawnCoordsScript="$scriptDir/../export/SpawnCoordinate.py"
 
 mkdir -p "$outputDir"
@@ -41,7 +43,7 @@ read spawnX spawnY spawnZ <<< "$spawnCoords"
 
 echo "Spawn Coordinates: x=$spawnX, y=$spawnY, z=$spawnZ"
 
-java -jar "$jmc2objPath" --resource-pack="$MinecraftJarPath" "$worldPath" -o "$outputFile" --area="$spawnX,$spawnY,$spawnZ,$((spawnX+512)),$((spawnZ+512))"
+java -jar "$jmc2objPath" --resource-pack="$MinecraftJarPath" "$worldPath" --offset=center --area="$spawnX,$spawnZ,$((spawnX+30)),$((spawnZ+30))"
 
 sleep 10
 

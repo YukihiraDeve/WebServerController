@@ -111,23 +111,35 @@ router.get('/list', (req, res) => {
 
   router.get('/players/:serverName', (req, res) => {
     const { serverName } = req.params;
-    shell.exec(`screen -S ${serverName} -p 0 -X stuff "list^M"`, { silent: true }, (code, stdout, stderr) => {
+    const screenCommand = `screen -S ${serverName} -p 0 -X stuff "list^M"`;
+    const logFile = `/servers/${serverName}/server.log`;
+  
+    console.log(`Executing command: ${screenCommand}`);
+    
+    shell.exec(screenCommand, { silent: true }, (code, stdout, stderr) => {
+      if (code) {
+        console.error(`Error executing screen command: ${stderr}`);
+        return res.status(500).send({ message: 'Failed to execute screen command', error: stderr });
+      }
+  
       setTimeout(() => {
-        shell.exec(`cat /servers/${serverName}/server.log | grep -m 1 "There are"`, (code, stdout, stderr) => {
+        shell.exec(`tail -n 20 ${logFile}`, (code, stdout, stderr) => {
           if (code) {
-            res.status(500).send({ message: 'Failed to get player count', error: stderr });
+            console.error(`Error reading log file: ${stderr}`);
+            return res.status(500).send({ message: 'Failed to read log file', error: stderr });
+          }
+  
+          const match = stdout.match(/There are (\d+) of a max of \d+ players online/);
+          if (match) {
+            res.send({ playerCount: parseInt(match[1], 10) });
           } else {
-            const match = stdout.match(/There are (\d+) of a max of \d+ players online/);
-            if (match) {
-              res.send({ playerCount: parseInt(match[1], 10) });
-            } else {
-              res.send({ playerCount: 0 });
-            }
+            res.send({ playerCount: 0 });
           }
         });
       }, 1000);
     });
   });
+  
   
 
   

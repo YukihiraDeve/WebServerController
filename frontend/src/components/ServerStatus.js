@@ -11,7 +11,7 @@ const ServerStatus = ({ serverName, section }) => {
       .then(data => setStats(prevStats => ({ ...prevStats, ...data })))
       .catch(error => console.error('Error fetching system stats:', error));
     
-    fetch(`http://90.79.8.144:3001/api/minecraft/players/${serverName}`, {
+    fetch(`http://90.79.8.144:3001/api/players/${serverName}`, {
       headers: { 'x-api-key': 'test' }
     })
       .then(response => response.json())

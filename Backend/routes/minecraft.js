@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const shell = require('shelljs');
-const path = require('path'); 
+const path = require('path');
+const util = require('minecraft-server-util'); // Import minecraft-server-util
 
 let servers = ["test"];
 
@@ -70,21 +71,17 @@ router.post('/export/:serverName/:worldName?', (req, res) => {
     }})
   });
 
-  
-
-
-
-  router.post('/exportMTL/:serverName/:worldName?', (req, res) => {
-    const { serverName, worldName = 'world' } = req.params;
-    const outputDir = `/servers/${serverName}/exports`;
-    const filePath = path.join(outputDir, `${worldName}.mtl`);
-    res.download(filePath, `${worldName}.mtl`, (err) => {
-      if (err) {
-          console.error('Error sending file:', err);
-          res.status(500).send({ message: 'Error sending file', error: err });
-          }
-      });            
-  });
+router.post('/exportMTL/:serverName/:worldName?', (req, res) => {
+  const { serverName, worldName = 'world' } = req.params;
+  const outputDir = `/servers/${serverName}/exports`;
+  const filePath = path.join(outputDir, `${worldName}.mtl`);
+  res.download(filePath, `${worldName}.mtl`, (err) => {
+    if (err) {
+        console.error('Error sending file:', err);
+        res.status(500).send({ message: 'Error sending file', error: err });
+        }
+    });            
+});
 
 router.get('/list', (req, res) => {
     shell.exec('./scripts/listServer.sh', (code, stdout, stderr) => {
@@ -95,54 +92,28 @@ router.get('/list', (req, res) => {
         res.json(serverList);
       }
     });
+});
+
+router.get('/status/:serverName', (req, res) => {
+  const { serverName } = req.params;
+  shell.exec(`./scripts/checkServerStatus.sh ${serverName}`, (code, stdout, stderr) => {
+    if (code) {
+      res.send({ status: 'off', message: stdout });
+    } else {
+      res.send({ status: 'on', message: stdout });
+    }
   });
+});
 
-
-  router.get('/status/:serverName', (req, res) => {
-    const { serverName } = req.params;
-    shell.exec(`./scripts/checkServerStatus.sh ${serverName}`, (code, stdout, stderr) => {
-      if (code) {
-        res.send({ status: 'off', message: stdout });
-      } else {
-        res.send({ status: 'on', message: stdout });
-      }
-    });
-  });
-
-  router.get('/players/:serverName', (req, res) => {
-    const { serverName } = req.params;
-    const screenCommand = `screen -S ${serverName} -p 0 -X stuff "list^M"`;
-    const logFile = `/servers/${serverName}/server.log`;
-  
-    console.log(`Executing command: ${screenCommand}`);
-    
-    shell.exec(screenCommand, { silent: true }, (code, stdout, stderr) => {
-      if (code) {
-        console.error(`Error executing screen command: ${stderr}`);
-        return res.status(500).send({ message: 'Failed to execute screen command', error: stderr });
-      }
-  
-      setTimeout(() => {
-        shell.exec(`tail -n 20 ${logFile}`, (code, stdout, stderr) => {
-          if (code) {
-            console.error(`Error reading log file: ${stderr}`);
-            return res.status(500).send({ message: 'Failed to read log file', error: stderr });
-          }
-  
-          const match = stdout.match(/There are (\d+) of a max of \d+ players online/);
-          if (match) {
-            res.send({ playerCount: parseInt(match[1], 10) });
-          } else {
-            res.send({ playerCount: 0 });
-          }
-        });
-      }, 1000);
-    });
-  });
-  
-  
-
-  
-
+router.get('/players/:serverName', async (req, res) => {
+  const { serverName } = req.params;
+  try {
+    const response = await util.status('localhost', { port: 25565 }); // Remplacez 'localhost' par l'adresse IP du serveur si nécessaire
+    res.send({ playerCount: response.players.online });
+  } catch (error) {
+    console.error(`Error fetching player count: ${error}`);
+    res.status(500).send({ message: 'Failed to fetch player count', error });
+  }
+});
 
 module.exports = router;

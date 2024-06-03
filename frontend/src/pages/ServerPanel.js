@@ -13,7 +13,7 @@ const ServerPanel = () => {
   };
 
   return (
-    <div>
+    <div className="mx-20">
       <div className="col-span-12 justify-between items-center p-4">
         <button
           onClick={handleBack}
@@ -22,30 +22,33 @@ const ServerPanel = () => {
           Back to Servers
         </button>
       </div>
-      <div className="grid grid-cols-5 grid-rows-5 gap-2">
-        {/* Position 1 */}
-        <div className="">
-          <ServerStatus serverName={serverName} section="memory" />
-        </div>
-        {/* Position 2 */}
-        <div className="">
+      <div className="grid grid-cols-5 grid-rows-5 gap-4">
+        {/* CPU */}
+        <div>
           <ServerStatus serverName={serverName} section="cpu" />
         </div>
-        {/* Position 3 */}
-        <div className="">
+        {/* Memory */}
+        <div>
+          <ServerStatus serverName={serverName} section="memory" />
+        </div>
+        {/* Storage */}
+        <div>
           <ServerStatus serverName={serverName} section="storage" />
         </div>
-        <div className="">
+        {/* Player */}
+        <div>
           <ServerStatus serverName={serverName} section="players" />
         </div>
-        {/* Position 4 */}
-        <div className="col-span-3 row-span-3 col-start-1 row-start-2 p-2 drop-shadow-xl bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col justify-center overflow-hidden mx-auto w-full">
+        {/* MinecraftModelLoader */}
+        <div className="col-span-3 row-span-2 col-start-1 row-start-2 p-2 drop-shadow-xl bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col justify-center overflow-hidden mx-auto w-full">
           <MinecraftModelLoader serverName={serverName} />
         </div>
-        {/* Position 5 */}
-        <div className="col-start-4 row-start-1">
+        {/* MinecraftControl */}
+        <div className="col-start-5 row-start-1">
           <MinecraftControl serverName={serverName} />
         </div>
+        <div className="col-span-2 row-span-2 col-start-4">8</div>
+
       </div>
     </div>
   );

@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from 'react';
 
 const ServerStatus = ({ serverName, section }) => {
-  const [stats, setStats] = useState({ memory: {}, cpu: [], storage: '' });
+  const [stats, setStats] = useState({ memory: {}, cpu: [], storage: '', players: 0 });
 
   const fetchStats = () => {
     fetch(`http://90.79.8.144:3001/api/system-stats/stats/${serverName}`, {
       headers: { 'x-api-key': 'test' }
     })
       .then(response => response.json())
-      .then(data => setStats(data))
+      .then(data => setStats(prevStats => ({ ...prevStats, ...data })))
       .catch(error => console.error('Error fetching system stats:', error));
+    
+    fetch(`http://90.79.8.144:3001/api/players/${serverName}`, {
+      headers: { 'x-api-key': 'test' }
+    })
+      .then(response => response.json())
+      .then(data => setStats(prevStats => ({ ...prevStats, players: data.playerCount })))
+      .catch(error => console.error('Error fetching player count:', error));
   };
 
   useEffect(() => {
@@ -68,6 +75,15 @@ const ServerStatus = ({ serverName, section }) => {
             <dl className="space-y-2">
               <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Storage Free</dt>
               <dd className="text-5xl font-light md:text-6xl dark:text-white">{storageFreePercent}%</dd>
+            </dl>
+          </div>
+        );
+      case 'players':
+        return (
+          <div className="drop-shadow-xl p-6 bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col justify-center h-48 overflow-hidden">
+            <dl className="space-y-2">
+              <dt className="text-sm font-medium text-gray-500 dark:text-gray-400">Players Online</dt>
+              <dd className="text-5xl font-light md:text-6xl dark:text-white">{stats.players}</dd>
             </dl>
           </div>
         );

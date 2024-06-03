@@ -8,6 +8,7 @@ import ServerPropertiesEditor from '../components/ServerPropertiesEditor';
 const ServerPanel = () => {
   const { serverName } = useParams();
   const navigate = useNavigate();
+  const apiKey = 'test'; 
 
   const handleBack = () => {
     navigate('/');
@@ -23,35 +24,28 @@ const ServerPanel = () => {
           Back to Servers
         </button>
       </div>
-      <div className="grid grid-cols-5 grid-rows-5 gap-4">
-        {/* CPU */}
-        <div>
+      <div className="grid grid-cols-5 gap-4">
+        <div className="col-span-1">
           <ServerStatus serverName={serverName} section="cpu" />
         </div>
-        {/* Memory */}
-        <div>
+        <div className="col-span-1">
           <ServerStatus serverName={serverName} section="memory" />
         </div>
-        {/* Storage */}
-        <div>
+        <div className="col-span-1">
           <ServerStatus serverName={serverName} section="storage" />
         </div>
-        {/* Player */}
-        <div>
+        <div className="col-span-1">
           <ServerStatus serverName={serverName} section="players" />
         </div>
-        {/* MinecraftModelLoader */}
-        <div className="col-span-3 row-span-2 col-start-1 row-start-2 p-2 drop-shadow-xl bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col justify-center overflow-hidden mx-auto w-full">
-          <MinecraftModelLoader serverName={serverName} />
-        </div>
-        {/* MinecraftControl */}
-        <div className="col-start-5 row-start-1">
+        <div className="col-span-1">
           <MinecraftControl serverName={serverName} />
         </div>
-        <div className="col-span-2 row-span-2 col-start-4">
-          <ServerPropertiesEditor serverName={serverName} />
+        <div className="col-span-3 row-span-2 col-start-1 p-2 drop-shadow-xl bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col justify-center overflow-hidden mx-auto w-full">
+          <MinecraftModelLoader serverName={serverName} />
         </div>
-
+        <div className="col-span-2 row-span-2 col-start-4 p-4">
+          <ServerPropertiesEditor serverName={serverName} apiKey={apiKey} />
+        </div>
       </div>
     </div>
   );

@@ -39,27 +39,27 @@ const ServerList = () => {
   };
 
   return (
-    <div className="flex flex-col items-center p-6">
-      <h1 className="text-2xl font-bold mb-4">Minecraft Servers</h1>
-      <div className="mb-6">
+    <div className="flex flex-col items-center p-6 z-10">
+      <h1 className="text-2xl font-bold mb-4 z-10">Minecraft Servers</h1>
+      <div className="mb-6 z-10">
         <input
           type="text"
           placeholder="Server Name"
           value={serverName}
           onChange={(e) => setServerName(e.target.value)}
           className="mr-2 px-3 py-2 bg-white border border-gray-300 rounded-md text-sm shadow-sm placeholder-gray-400
-              focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+              focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 z-10"
         />
         <button
           onClick={handleCreateServer}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded z-10"
         >
           Create Server
         </button>
       </div>
-      <ul className="w-full">
+      <ul className="w-full z-10">
         {servers.map(server => (
-          <li key={server} className="p-4 bg-white shadow rounded-lg mb-4 cursor-pointer" onClick={() => handleServerClick(server)}>
+          <li key={server} className="p-4 bg-white shadow rounded-lg mb-4 cursor-pointer z-10" onClick={() => handleServerClick(server)}>
             {server}
           </li>
         ))}

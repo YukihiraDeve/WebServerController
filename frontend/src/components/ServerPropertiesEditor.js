@@ -52,28 +52,28 @@ const ServerPropertiesEditor = ({ serverName, apiKey }) => {
   };
 
   return (
-    <div className="p-6 bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col space-y-4">
-      <h2 className="text-xl font-semibold text-gray-700 dark:text-white">Edit Server Properties</h2>
-      <div className="grid grid-cols-1 gap-4">
+    <div className="p-6 bg-white shadow rounded-2xl dark:bg-gray-900 dark:bg-opacity-50 flex flex-col space-y-4 z-20">
+      <h2 className="text-xl font-semibold text-gray-700 dark:text-white z-20">Edit Server Properties</h2>
+      <div className="grid grid-cols-1 gap-4 z-20">
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400">MOTD</label>
-          <input type="text" name="motd" value={properties.motd} onChange={handleChange} className="mt-1 block w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600" />
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 z-20">MOTD</label>
+          <input type="text" name="motd" value={properties.motd} onChange={handleChange} className="mt-1 block w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 z-20" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400">Allow Nether</label>
-          <input type="checkbox" name="allowNether" checked={properties.allowNether} onChange={handleChange} className="mt-1 block" />
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 z-20">Allow Nether</label>
+          <input type="checkbox" name="allowNether" checked={properties.allowNether} onChange={handleChange} className="mt-1 block z-20" />
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-400">Level Name</label>
-          <input type="text" name="levelName" value={properties.levelName} onChange={handleChange} className="mt-1 block w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600" />
+          <input type="text" name="levelName" value={properties.levelName} onChange={handleChange} className="mt-1 block w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 z-20" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400">Enable Command Block</label>
-          <input type="checkbox" name="enableCommandBlock" checked={properties.enableCommandBlock} onChange={handleChange} className="mt-1 block" />
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 z-20">Enable Command Block</label>
+          <input type="checkbox" name="enableCommandBlock" checked={properties.enableCommandBlock} onChange={handleChange} className="mt-1 block z-20" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400">Gamemode</label>
-          <select name="gamemode" value={properties.gamemode} onChange={handleChange} className="mt-1 block w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 z-20">Gamemode</label>
+          <select name="gamemode" value={properties.gamemode} onChange={handleChange} className="mt-1 block w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 z-20">
             <option value="survival">Survival</option>
             <option value="creative">Creative</option>
             <option value="adventure">Adventure</option>
@@ -81,15 +81,15 @@ const ServerPropertiesEditor = ({ serverName, apiKey }) => {
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400">Max Players</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 z-20">Max Players</label>
           <input type="number" name="maxPlayers" value={properties.maxPlayers} onChange={handleChange} className="mt-1 block w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400">PVP</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 z-20">PVP</label>
           <input type="checkbox" name="pvp" checked={properties.pvp} onChange={handleChange} className="mt-1 block" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400">Difficulty</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 z-20">Difficulty</label>
           <select name="difficulty" value={properties.difficulty} onChange={handleChange} className="mt-1 block w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600">
             <option value="peaceful">Peaceful</option>
             <option value="easy">Easy</option>
@@ -98,23 +98,23 @@ const ServerPropertiesEditor = ({ serverName, apiKey }) => {
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400">Spawn Monsters</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 z-20">Spawn Monsters</label>
           <input type="checkbox" name="spawnMonsters" checked={properties.spawnMonsters} onChange={handleChange} className="mt-1 block" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400">Generate Structures</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 z-20">Generate Structures</label>
           <input type="checkbox" name="generateStructures" checked={properties.generateStructures} onChange={handleChange} className="mt-1 block" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400">View Distance</label>
-          <input type="number" name="viewDistance" value={properties.viewDistance} onChange={handleChange} className="mt-1 block w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600" />
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 z-20">View Distance</label>
+          <input type="number" name="viewDistance" value={properties.viewDistance} onChange={handleChange} className="mt-1 block w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 z-20" />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400">Spawn Protection</label>
-          <input type="number" name="spawnProtection" value={properties.spawnProtection} onChange={handleChange} className="mt-1 block w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600" />
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 z-20">Spawn Protection</label>
+          <input type="number" name="spawnProtection" value={properties.spawnProtection} onChange={handleChange} className="mt-1 block w-full p-2 border border-gray-300 rounded-md dark:bg-gray-700 dark:border-gray-600 z-20" />
         </div>
-        <div className="flex justify-end">
-          <button onClick={handleEditProperties} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <div className="flex justify-end z-20">
+          <button onClick={handleEditProperties} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded z-20">
             Edit Properties
           </button>
         </div>

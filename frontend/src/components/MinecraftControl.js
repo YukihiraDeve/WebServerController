@@ -84,7 +84,7 @@ const MinecraftControl = ({ serverName }) => {
   };
 
   return (
-    <div className="drop-shadow-xl p-6 bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col justify-between h-48 overflow-hidden">
+    <div className="drop-shadow-xl p-6 bg-white shadow rounded-2xl dark:bg-gray-900 dark:bg-opacity-50 flex flex-col justify-between h-48 overflow-hidden">
       <div className="flex flex-col justify-center items-center space-y-4 h-full">
         {serverStatus === 'off' ? (
           <button

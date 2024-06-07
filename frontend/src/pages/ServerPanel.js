@@ -40,10 +40,10 @@ const ServerPanel = () => {
         <div className="col-span-1">
           <MinecraftControl serverName={serverName} />
         </div>
-        <div className="col-span-3 row-span-2 col-start-1 p-2 drop-shadow-xl bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col justify-center overflow-hidden mx-auto w-full">
+        <div className="col-span-3 row-span-2 col-start-1 dark:bg-opacity-50 p-2 drop-shadow-xl bg-white shadow rounded-2xl dark:bg-gray-900 flex flex-col justify-center overflow-hidden mx-auto w-full">
           <MinecraftModelLoader serverName={serverName} />
         </div>
-        <div className="col-span-2 row-span-2 col-start-4 p-4">
+        <div className="col-span-2 row-span-2 col-start-4 z-20">
           <ServerPropertiesEditor serverName={serverName} apiKey={apiKey} />
         </div>
       </div>

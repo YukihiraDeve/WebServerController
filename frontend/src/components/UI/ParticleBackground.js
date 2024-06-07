@@ -6,7 +6,7 @@ import { GlowParticle } from './GlowParticle';
 const color = [
     { r: 55, g: 25, b: 206 }, 
     { r: 44, g: 73, b: 127 },
-    { r: 20, g: 24, b: 62 }, 
+    { r: 20, g: 104, b: 62 }, 
     { r: 139, g: 136, b: 166 }  
 ];
 
@@ -19,7 +19,7 @@ class ParticleApp {
 
         this.pixelRatio = (window.devicePixelRatio > 1) ? 2 : 1;
 
-        this.totalParticles = 15;
+        this.totalParticles = 5;
         this.particles = [];
         this.maxRadius = 900;
         this.minRadius = 400;

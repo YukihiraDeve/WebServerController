@@ -22,13 +22,24 @@ const MinecraftModel = ({ objUrl, mtlUrl, texturePath }) => {
       const objLoader = new OBJLoader();
       objLoader.setMaterials(materials);
       objLoader.load(objUrl, (obj) => {
+        const torches = [];
         obj.traverse((child) => {
           if (child.isMesh) {
             child.castShadow = true;
             child.receiveShadow = true;
+            console.log(`Mesh found: ${child.name}, Material: ${child.material.name}`);
+            if (child.name.toLowerCase().includes("minecraft_block-torch")) {
+              console.log("torch found", child.position.x, child.position.y, child.position.z)
+              torches.push(child);
+            }
           }
         });
         setObject(obj);
+        torches.forEach(torch => {
+       const light = new THREE.PointLight(0xffa500, 1, 10);
+          light.position.set(torch.position.x, torch.position.y + 0.5, torch.position.z);
+          obj.add(light);
+       });
       }, 
       undefined, 
       (error) => {
@@ -141,11 +152,11 @@ const DayNightCycleLight = () => {
     if (ambientLightRef.current) {
       if (Math.sin(angle) > 0) {
   
-        ambientLightRef.current.color.setHSL(0.6, 1, 0.5);
+        ambientLightRef.current.color.setHSL(0.6, 1, 1);
         ambientLightRef.current.intensity = 0.5 + 0.5 * Math.sin(angle);
       } else {
   
-        ambientLightRef.current.color.setHSL(0.1, 0.5, 0.2);
+        ambientLightRef.current.color.setHSL(0.1, 0.5, 0.5);
         ambientLightRef.current.intensity = 0.3 + 0.4 * Math.cos(angle);
       }
     }

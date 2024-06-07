@@ -22,15 +22,17 @@ const MinecraftModel = ({ objUrl, mtlUrl, texturePath }) => {
       const objLoader = new OBJLoader();
       objLoader.setMaterials(materials);
       objLoader.load(objUrl, (obj) => {
-        const torches = [];
         obj.traverse((child) => {
           if (child.isMesh) {
             child.castShadow = true;
             child.receiveShadow = true;
-            console.log(`Mesh found: ${child.name}, Material: ${child.material.name}`);
-            if (child.name.toLowerCase().includes("minecraft_block-torch")) {
-              console.log("torch found", child.position.x, child.position.y, child.position.z)
-              torches.push(child);
+
+            if (child.material && child.material.name) {
+              console.log(`Mesh found: ${child.name}, Material: ${child.material.name}`);
+              if (child.material.name.toLowerCase().includes('minecraft_block-torch')) {
+                console.log('Potential torch material found:', child.material.name);
+                addTorchLights(child);
+              }
             }
           }
         });
@@ -51,6 +53,24 @@ const MinecraftModel = ({ objUrl, mtlUrl, texturePath }) => {
       console.error('Error loading MTL:', error);
     });
   }, [objUrl, mtlUrl, texturePath]);
+
+  function addTorchLight(mesh) {
+    // Compute the centroid of the mesh by averaging the positions of all vertices
+    const geometry = mesh.geometry;
+    geometry.computeBoundingBox();
+    const centroid = new THREE.Vector3();
+    geometry.boundingBox.getCenter(centroid);
+    centroid.applyMatrix4(mesh.matrixWorld);
+
+    // Adjust the light height based on your model's scale and coordinate system
+    const lightHeight = centroid.y + 0.5; 
+
+    const light = new THREE.PointLight(0xffa500, 1, 10);
+    light.position.set(centroid.x, lightHeight, centroid.z);
+    mesh.parent.add(light);
+
+    console.log(`Torch light added at (${centroid.x}, ${lightHeight}, ${centroid.z})`);
+  }
 
   return object ? <primitive object={object} ref={ref} scale={[1, 1, 1]} /> : null;
 };

@@ -108,7 +108,7 @@ router.get('/status/:serverName', (req, res) => {
 router.get('/players/:serverName', async (req, res) => {
   const { serverName } = req.params;
   try {
-    const response = await util.status('localhost', 25565); // Remplacez 'localhost' par l'adresse IP du serveur si nécessaire
+    const response = await util.status('90.79.8.144', 25565); // Remplacez 'localhost' par l'adresse IP du serveur si nécessaire
     res.send({ playerCount: response.players.online });
   } catch (error) {
     console.error(`Error fetching player count: ${error}`);
